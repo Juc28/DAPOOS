@@ -38,8 +38,7 @@ public class DamasGUI extends JFrame {
     public void comenzarJuego(){
        DamaPoos.nuevoJuego();
        juego = DamaPoos.getJuego();
-        List<Ficha> fichas = juego.getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
-        fichas.get(0).getImagen();
+
     }
 
     private void prepareElementos() {
@@ -52,6 +51,7 @@ public class DamasGUI extends JFrame {
         fileChooser = new JFileChooser();
         fileChooser.setVisible(false);
         prepareElementosIncio();
+
 
     }
 
@@ -152,7 +152,6 @@ public class DamasGUI extends JFrame {
                 inicio.areasDates();
                 prepareAccionTablero();
                 prepareAccionAtras3();
-
             }
         });
     }
@@ -171,6 +170,7 @@ public class DamasGUI extends JFrame {
                 inicio.tablero();
                 setSize(new Dimension(900, 590));
                 prepareAccionEmpezarN();
+                comenzarJuego();
 
             }
         });
@@ -201,6 +201,7 @@ public class DamasGUI extends JFrame {
                 setSize(new Dimension(900, 590));
                 inicio.prepararElementosJugadores();
                 prepareAccionesJugadores();
+                juego.ponerfichas();
             }
         });
     }

@@ -9,7 +9,7 @@ public class DamaPoos implements Serializable {
     private Jugador[] jugadores;
     private Ficha[] fichasNegras;
     private Ficha[] fichasRojas;
-    private int tablero[][] ;
+    private Ficha[][] tablero ;
     private Elemento[] elementos;
     private ArrayList<Comodin> comodines;
     private ArrayList<Casilla> casillas;
@@ -41,11 +41,11 @@ public class DamaPoos implements Serializable {
         this.fichasRojas = fichasRojas;
     }
 
-    public int[][] getTablero() {
+    public Ficha[][] getTablero() {
         return tablero;
     }
 
-    public void setTablero(int[][] tablero) {
+    public void setTablero(Ficha[][] tablero) {
         this.tablero = tablero;
     }
 
@@ -74,7 +74,9 @@ public class DamaPoos implements Serializable {
     }
     private static List<Ficha> fichas;
 
+
     public DamaPoos(){
+
         fichas = getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
     }
     public static DamaPoos getJuego(){
@@ -91,8 +93,8 @@ public class DamaPoos implements Serializable {
         List<Ficha> fichas = new ArrayList<>();
         for(int i=0 ; i< 20; i++){
             Ficha ficha = new Ficha();
-            if(color == "negro"){
-                ficha.setColor("negro");
+            if(color == VariablesConstantes.COLOR_FICHA_NEGRA){
+                ficha.setColor(VariablesConstantes.COLOR_FICHA_NEGRA);
                 ficha.setImagen("src/presentacion/imagenes/fichaNn.jpg");
             }
             fichas.add(ficha);
@@ -100,5 +102,14 @@ public class DamaPoos implements Serializable {
         return fichas;
     }
 
-
+    public void ponerfichas() {
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero[0].length; j++) {
+                if ((((i == 0) || (i == 2)) && (j % 2 != 0)) || (((i == 1) || (i == 3)) && (j % 2 == 0))) {
+                    juego.getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
+                    juego.tablero[i][j].getImagen();
+                }
+            }
+        }
+    }
 }

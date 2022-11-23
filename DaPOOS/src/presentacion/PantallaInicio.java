@@ -187,9 +187,10 @@ public class PantallaInicio extends JPanel {
 
                 if (((j % 2 == 0) && (i % 2 != 0)) || ((j % 2 != 0) && (i % 2 == 0))) {
                     boton[i][j].setIcon(imagenx);
-                }if ((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
-                    boton[i][j].setIcon(new ImageIcon("src/presentacion/imagenes/fichaNn.jpg"));
-                }
+
+                }//if ((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
+                   // boton[i][j].setIcon(new ImageIcon("src/presentacion/imagenes/fichaNn.jpg"));
+                //}
             }
         }
 
@@ -197,11 +198,15 @@ public class PantallaInicio extends JPanel {
         add(juego, BorderLayout.CENTER);
         repaint();
     }
+    public void prepareElegirElementos(){
+
+    }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(fondo, 0, 0, this);
     }
+
 
 
 
