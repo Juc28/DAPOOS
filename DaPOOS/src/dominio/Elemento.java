@@ -13,6 +13,9 @@ public class Elemento {
         this.imagen = imagen;
     }
 
+    public Elemento() {
+    }
+
     public String getColor() {
         return color;
     }

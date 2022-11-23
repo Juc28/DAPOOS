@@ -6,7 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.List;
 
+import dominio.DamaPoos;
+import dominio.Ficha;
+import dominio.VariablesConstantes;
 
 
 public class DamasGUI extends JFrame {
@@ -19,9 +23,11 @@ public class DamasGUI extends JFrame {
     private  CardLayout layout;
 
     private Icon icono;
+    private DamaPoos juego;
 
 
     public DamasGUI() {
+        super("DamaPoos");
         prepareElementos();
         prepareActions();
         ImageIcon icono = new ImageIcon("src/presentacion/imagenes/log.png");
@@ -29,7 +35,15 @@ public class DamasGUI extends JFrame {
         setIconImage(icon);
     }
 
+    public void comenzarJuego(){
+       DamaPoos.nuevoJuego();
+       juego = DamaPoos.getJuego();
+        List<Ficha> fichas = juego.getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
+        fichas.get(0).getImagen();
+    }
+
     private void prepareElementos() {
+
         setTitle("DaPOOS");
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         setResizable(false);

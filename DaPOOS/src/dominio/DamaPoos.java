@@ -2,6 +2,7 @@ package dominio;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DamaPoos implements Serializable {
     private static DamaPoos juego = null;
@@ -71,11 +72,10 @@ public class DamaPoos implements Serializable {
     public void setCasillas(ArrayList<Casilla> casillas) {
         this.casillas = casillas;
     }
+    private static List<Ficha> fichas;
 
     public DamaPoos(){
-        casillas = new ArrayList<Casilla>();
-        this.elementos = elementos;
-        tablero = new int[10][10];
+        fichas = getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
     }
     public static DamaPoos getJuego(){
         if(juego == null){
@@ -85,6 +85,19 @@ public class DamaPoos implements Serializable {
     }
     public static void nuevoJuego(){
         juego = new DamaPoos();
+    }
+
+    public List<Ficha> getFichas(String color){
+        List<Ficha> fichas = new ArrayList<>();
+        for(int i=0 ; i< 20; i++){
+            Ficha ficha = new Ficha();
+            if(color == "negro"){
+                ficha.setColor("negro");
+                ficha.setImagen("src/presentacion/imagenes/fichaNn.jpg");
+            }
+            fichas.add(ficha);
+        }
+        return fichas;
     }
 
 

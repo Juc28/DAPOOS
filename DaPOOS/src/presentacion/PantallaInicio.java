@@ -1,5 +1,7 @@
 package presentacion;
 
+import dominio.Ficha;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -182,11 +184,16 @@ public class PantallaInicio extends JPanel {
                 boton[i][j].setContentAreaFilled(false);
                 boton[i][j].setOpaque(false);
                 juego.add(boton[i][j]);
+
                 if (((j % 2 == 0) && (i % 2 != 0)) || ((j % 2 != 0) && (i % 2 == 0))) {
                     boton[i][j].setIcon(imagenx);
+                }if ((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
+                    boton[i][j].setIcon(new ImageIcon("src/presentacion/imagenes/fichaNn.jpg"));
                 }
             }
         }
+
+
         add(juego, BorderLayout.CENTER);
         repaint();
     }
