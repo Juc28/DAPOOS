@@ -15,6 +15,7 @@ import dominio.VariablesConstantes;
 
 public class DamasGUI extends JFrame {
     private PantallaInicio inicio;
+    private Tablero tablero;
     private JMenuBar menu;
     private JMenu file;
     private JMenuItem open, save, saveas, exit;
@@ -167,7 +168,7 @@ public class DamasGUI extends JFrame {
     private void prepareAccionTablero(){
         inicio.empezar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                inicio.tablero();
+                tablero = new Tablero();
                 setSize(new Dimension(900, 590));
                 prepareAccionEmpezarN();
                 comenzarJuego();
@@ -201,12 +202,13 @@ public class DamasGUI extends JFrame {
                 setSize(new Dimension(900, 590));
                 inicio.prepararElementosJugadores();
                 prepareAccionesJugadores();
-                juego.ponerfichas();
+
             }
         });
     }
     private void prepareAccionEmpezarN(){
-        inicio.terminar.addActionListener(new ActionListener() {
+
+        tablero.terminar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setSize(new Dimension(900, 590));
                 inicio.prepareElemtosIn();

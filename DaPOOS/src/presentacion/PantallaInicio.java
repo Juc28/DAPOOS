@@ -15,12 +15,12 @@ public class PantallaInicio extends JPanel {
     public static final String fondoI3 = "src/presentacion/imagenes/fondo4.png";
     public static final String fondoI4 = "src/presentacion/imagenes/fondo2.png";
     public static final String fondoI5 = "src/presentacion/imagenes/fondo5.png";
-    protected JButton n,jugadores,maquina,continuar,empezar,atras,terminar;
+    protected JButton n,jugadores,maquina,continuar,empezar,atras;
     private BufferedImage fondo;
     private JComboBox<Object> Color1, Color2,forma;
     private JLabel jugador1, jugador2,titulo1,titulo2;
     private JTextField nombre1, nombre2,tim,porc;
-    private JButton[][] boton;
+
     private JRadioButton radio1,radio2,radio3,radio4;
     private ButtonGroup bg;
     public PantallaInicio(String imagen){
@@ -150,57 +150,8 @@ public class PantallaInicio extends JPanel {
         repaint();
     }
 
-    public void tablero() {
-        removeAll();
-        setFondo(PantallaInicio.fondoI3);
-        terminar = new JButton("Terminar Juego");
-        terminar.setBounds(720,400,140,40);
-        terminar.setIcon(new ImageIcon("src/presentacion/imagenes/terminar.png"));
-        add(terminar);
-        Image imagen = new ImageIcon(getClass().getResource("imagenes/EspacionNegro.png")).getImage();
-        Image newimag = imagen.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
-        ImageIcon imagenx = new ImageIcon(newimag);
-        JLabel c = new JLabel("Información del juego actual");
-        c.setBounds(720,5,220,20);
-        add(c);
-        JLabel inf1 = new JLabel("Jugador 1");
-        inf1.setBounds(720,30,220,20);
-        add(inf1);
-        JLabel inf2 = new JLabel("Jugador 2");
-        inf2.setBounds(720,125,220,20);
-        add(inf2);
-        JLabel turno = new JLabel("TURNO");
-        turno.setBounds(720,220,220,20);
-        add(turno);
-        JPanel juego = new JPanel(new GridLayout(10, 10));
-        boton = new JButton[10][10];
-        juego.setBounds(5,10,700,500);
-        juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-        for (int i = 0; i < boton.length; i++) {
-            for (int j = 0; j < boton[0].length; j++) {
-                boton[i][j] = new JButton();
-                boton[i][j].setBackground(Color.WHITE);
-                boton[i][j].setBorderPainted(false);
-                boton[i][j].setContentAreaFilled(false);
-                boton[i][j].setOpaque(false);
-                juego.add(boton[i][j]);
-
-                if (((j % 2 == 0) && (i % 2 != 0)) || ((j % 2 != 0) && (i % 2 == 0))) {
-                    boton[i][j].setIcon(imagenx);
-
-                }//if ((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
-                   // boton[i][j].setIcon(new ImageIcon("src/presentacion/imagenes/fichaNn.jpg"));
-                //}
-            }
-        }
 
 
-        add(juego, BorderLayout.CENTER);
-        repaint();
-    }
-    public void prepareElegirElementos(){
-
-    }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

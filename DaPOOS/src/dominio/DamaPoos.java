@@ -7,9 +7,7 @@ import java.util.List;
 public class DamaPoos implements Serializable {
     private static DamaPoos juego = null;
     private Jugador[] jugadores;
-    private Ficha[] fichasNegras;
-    private Ficha[] fichasRojas;
-    private Ficha[][] tablero ;
+
     private Elemento[] elementos;
     private ArrayList<Comodin> comodines;
     private ArrayList<Casilla> casillas;
@@ -26,28 +24,7 @@ public class DamaPoos implements Serializable {
         this.jugadores = jugadores;
     }
 
-    public Ficha[] getFichasNegras() {
-        return fichasNegras;
-    }
 
-    public void setFichasNegras(Ficha[] fichasNegras) {
-        this.fichasNegras = fichasNegras;
-    }
-    public Ficha[] getFichasRojas() {
-        return fichasRojas;
-    }
-
-    public void setFichasRojas(Ficha[] fichasRojas) {
-        this.fichasRojas = fichasRojas;
-    }
-
-    public Ficha[][] getTablero() {
-        return tablero;
-    }
-
-    public void setTablero(Ficha[][] tablero) {
-        this.tablero = tablero;
-    }
 
     public Elemento[] getElementos() {
         return elementos;
@@ -102,14 +79,5 @@ public class DamaPoos implements Serializable {
         return fichas;
     }
 
-    public void ponerfichas() {
-        for (int i = 0; i < tablero.length; i++) {
-            for (int j = 0; j < tablero[0].length; j++) {
-                if ((((i == 0) || (i == 2)) && (j % 2 != 0)) || (((i == 1) || (i == 3)) && (j % 2 == 0))) {
-                    juego.getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
-                    juego.tablero[i][j].getImagen();
-                }
-            }
-        }
-    }
+
 }
