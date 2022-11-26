@@ -1,5 +1,5 @@
 package presentacion;
-
+//clase
 import dominio.DamaPoos;
 import dominio.Elemento;
 import dominio.Ficha;
