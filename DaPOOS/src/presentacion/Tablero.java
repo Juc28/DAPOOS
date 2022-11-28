@@ -1,5 +1,6 @@
 package presentacion;
 //clase
+
 import dominio.DamaPoos;
 import dominio.Elemento;
 import dominio.Ficha;
@@ -19,6 +20,8 @@ public class Tablero extends JPanel {
     private JButton[][] boton;
     private BufferedImage fondo;
 
+    private DamaPoos juego = new DamaPoos();
+
 
     public Tablero() {
         removeAll();
@@ -29,6 +32,7 @@ public class Tablero extends JPanel {
     }
 
     private void crearBotonesJuego(List<Ficha> fichas) {
+        List<Ficha> fichas1 = juego.getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
         Image imagen = new ImageIcon(getClass().getResource("imagenes/EspacionNegro.png")).getImage();
         Image newimag = imagen.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
         ImageIcon imagenx = new ImageIcon(newimag);
@@ -48,11 +52,12 @@ public class Tablero extends JPanel {
                 if (((j % 2 == 0) && (i % 2 != 0)) || ((j % 2 != 0) && (i % 2 == 0))) {
                     boton[i][j].setIcon(imagenx);
 
-                }if ((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
-                    Ficha ficha = new Ficha();
-                    ficha.setImagen("src/presentacion/imagenes/fichaNn.jpg");
-                    //boton[i][j].setIcon(new ImageIcon(ficha.getImagen()));
-                    boton[i][j].setIcon(new ImageIcon("src/presentacion/imagenes/fichaNn.jpg"));
+                }
+                if ((((i == 0) || (i == 2)) && (j % 2 != 0)) || (((i == 1) || (i == 3)) && (j % 2 == 0))) {
+                    for (Ficha fiacha : fichas1) {
+                        boton[i][j].setIcon(new ImageIcon(fiacha.getImagen()));
+                    }
+
                 }
             }
 
