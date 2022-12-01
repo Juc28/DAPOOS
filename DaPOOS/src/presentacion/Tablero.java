@@ -20,11 +20,12 @@ public class Tablero extends JPanel {
     private BufferedImage fondo;
 
 
-    public Tablero() {
+    public Tablero(CardLayout layout) {
+        super(layout);
         removeAll();
         setFondo(PantallaInicio.fondoI3);
-        prepararElementosTerminar();
-        prepareElementosInformacion();
+        //prepararElementosTerminar();
+        //prepareElementosInformacion();
         crearBotonesJuego(fichas);
     }
 
@@ -47,7 +48,6 @@ public class Tablero extends JPanel {
 
                 if (((j % 2 == 0) && (i % 2 != 0)) || ((j % 2 != 0) && (i % 2 == 0))) {
                     boton[i][j].setIcon(imagenx);
-
                 }if ((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
                     Ficha ficha = new Ficha();
                     ficha.setImagen("src/presentacion/imagenes/fichaNn.jpg");
@@ -62,7 +62,7 @@ public class Tablero extends JPanel {
     }
 
 
-    private void prepareElementosInformacion() {
+    void prepareElementosInformacion() {
         JLabel c = new JLabel("Información del juego actual");
         c.setBounds(720, 5, 220, 20);
         add(c);
