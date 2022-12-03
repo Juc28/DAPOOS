@@ -21,8 +21,9 @@ public class Tablero extends JPanel {
     private BufferedImage fondo;
 
 
-    public Tablero(CardLayout layout) {
+    public Tablero(CardLayout layout,DamaPoos juego) {
         super(layout);
+        juego.setTablero();
         removeAll();
         setFondo(PantallaInicio.fondoI3);
         //prepararElementosTerminar();

@@ -6,8 +6,7 @@ import java.util.ArrayList;
 public class Jugador {
     private String nombre;
     private String color;
-    private ArrayList<Ficha> fichasJugador1;
-    private ArrayList<Ficha> fichasJugador2;
+    private ArrayList<Ficha> fichas;
     private int[] estado;
 
     public Jugador(String nombre, String color) {
@@ -24,29 +23,29 @@ public class Jugador {
         this.nombre = nombre;
     }
 
-
-    public ArrayList<Ficha> getFichasJugador1() {
-        fichasJugador1 = new ArrayList<Ficha>();
+    public String getColor(){return color;}
+    public void setFichas(String color) {
+        fichas = new ArrayList<Ficha>();
         for(int i=0 ; i< 20; i++){
             Ficha ficha = new Ficha();
-            ficha.setIcon(new ImageIcon("src/presentacion/imagen/FichaGg"));
-            fichasJugador1.add(ficha);
+            ficha.setColor(color);
+            if(color == "Negro"){
+                ficha.setIcon(new ImageIcon("src/presentacion/imagen/FichaGg"));
+            }else {
+                ficha.setIcon(new ImageIcon("src/presentacion/imagen/FichaRr"));
+            }
+            fichas.add(ficha);
         }
-        return fichasJugador1;
     }
-    public ArrayList<Ficha> getFichasJugador2(){
-        fichasJugador2 = new ArrayList<Ficha>();
-        for(int i=0 ; i< 20; i++){
-            Ficha ficha = new Ficha();
-            ficha.setIcon(new ImageIcon("src/presentacion/imagen/FichaRr"));
-            fichasJugador2.add(ficha);
-
-            fichasJugador2.add(ficha);
+    public ArrayList<Ficha> getFichas(){return fichas;}
+    public Ficha getFichaNoEnTablero(){
+        for (Ficha ficha:fichas){
+            if(ficha.getX() == null && ficha.getY() == null){
+                return ficha;
+            }
         }
-        return  fichasJugador2;
+        return null;
     }
-
-
 
     public int[] getEstado() {
         return estado;

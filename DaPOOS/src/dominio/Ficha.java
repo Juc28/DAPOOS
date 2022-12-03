@@ -8,8 +8,8 @@ public class Ficha extends Elemento {
     private ImageIcon icon;
     private String[][] tablero;
 
-    public Ficha(int x, int y, String imagen) {
-        super( x, y, imagen);
+    public Ficha(String color,Integer x, Integer y) {
+        super(color, x, y);
     }
     public Ficha(){}
 
