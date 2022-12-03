@@ -1,5 +1,4 @@
 package presentacion;
-//clase
 import dominio.DamaPoos;
 import dominio.Elemento;
 import dominio.Ficha;
@@ -8,13 +7,15 @@ import dominio.VariablesConstantes;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 public class Tablero extends JPanel {
-    private List<Ficha> fichas = DamaPoos.getJuego().getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
+    //private List<Ficha> fichas = DamaPoos.getJuego().getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
     protected JButton terminar;
     private JButton[][] boton;
     private BufferedImage fondo;
@@ -26,34 +27,76 @@ public class Tablero extends JPanel {
         setFondo(PantallaInicio.fondoI3);
         //prepararElementosTerminar();
         //prepareElementosInformacion();
-        crearBotonesJuego(fichas);
+        crearTablero();
     }
-
-    private void crearBotonesJuego(List<Ficha> fichas) {
-        Image imagen = new ImageIcon(getClass().getResource("imagenes/EspacionNegro.png")).getImage();
-        Image newimag = imagen.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+    BoardSquare previouslySelected;
+    public class BoardSquare extends JButton{
+        public int x;
+        public int y;
+        public Ficha ficha;
+        public Color emptyColor;
+    }
+    private void crearTablero() {
+        Image imagen = new ImageIcon(getClass().getResource("imagenes/FichaGg.gif")).getImage();
+        Image newimag = imagen.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
         ImageIcon imagenx = new ImageIcon(newimag);
+        Image imagen1 = new ImageIcon(getClass().getResource("imagenes/FichaRr.gif")).getImage();
+        Image newimag1 = imagen1.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        ImageIcon imagenx1 = new ImageIcon(newimag1);
         JPanel juego = new JPanel(new GridLayout(10, 10));
-        boton = new JButton[10][10];
+        boton = new BoardSquare[10][10];
+        Color color1 = new Color(50,35,9);
         juego.setBounds(5, 10, 700, 500);
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         for (int i = 0; i < boton.length; i++) {
             for (int j = 0; j < boton[0].length; j++) {
-                boton[i][j] = new JButton();
-                boton[i][j].setBackground(Color.WHITE);
-                boton[i][j].setBorderPainted(false);
-                boton[i][j].setContentAreaFilled(false);
-                boton[i][j].setOpaque(false);
-                juego.add(boton[i][j]);
+                BoardSquare boardSquare = new BoardSquare();
+                boardSquare.x = i;
+                boardSquare.y = j;
+                boardSquare.setBorderPainted(false);
+                boardSquare.setContentAreaFilled(false);
+                boardSquare.setOpaque(true);
+                boardSquare.emptyColor = color1;
+                boardSquare.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        BoardSquare s = (BoardSquare)e.getSource();
+                        if(s.ficha == null){
+                            System.out.println("No hay una ficha");
+                            if(previouslySelected != null){
+                                previouslySelected.setBackground(previouslySelected.emptyColor);
+                                previouslySelected.setIcon(null);
+                                s.ficha = previouslySelected.ficha;
+                                s.setIcon(imagenx);
+                                previouslySelected.ficha = null;
+                            }
+                        }else {
+                            previouslySelected = (s == previouslySelected)? null: s;
+                        }
+                    }
+                });
 
                 if (((j % 2 == 0) && (i % 2 != 0)) || ((j % 2 != 0) && (i % 2 == 0))) {
-                    boton[i][j].setIcon(imagenx);
+                    boardSquare.setBackground(color1);
+                    boardSquare.emptyColor = color1;
                 }if ((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
                     Ficha ficha = new Ficha();
-                    ficha.setImagen("src/presentacion/imagenes/fichaNn.jpg");
-                    //boton[i][j].setIcon(new ImageIcon(ficha.getImagen()));
-                    boton[i][j].setIcon(new ImageIcon("src/presentacion/imagenes/fichaNn.jpg"));
+                    ficha.setX(i);
+                    ficha.setY(j);
+                    ficha.setIcon(imagenx);
+                    boardSquare.ficha = ficha;
+                    boardSquare.setIcon(imagenx);
+                }if ((((i == 8)  || (i==6))&&(j % 2 != 0)) || (((i == 7)|| (i==9))&&(j % 2 == 0))){
+                    Ficha ficha = new Ficha();
+                    ficha.setX(i);
+                    ficha.setY(j);
+                    ficha.setIcon(imagenx1);
+                    boardSquare.ficha = ficha;
+                    boardSquare.setIcon(imagenx1);
                 }
+
+                boton[i][j] = boardSquare;
+                juego.add(boton[i][j]);
             }
 
         }

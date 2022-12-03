@@ -6,11 +6,13 @@ import java.util.List;
 
 public class DamaPoos implements Serializable {
     private static DamaPoos juego = null;
+    private Ficha[][] tablero;
     private Jugador[] jugadores;
-
     private Elemento[] elementos;
     private ArrayList<Comodin> comodines;
     private ArrayList<Casilla> casillas;
+    private ArrayList<Ficha> fichasJugador1;
+    private ArrayList<Ficha> fichasJugador2;
 
     public static void setJuego(DamaPoos juego) {
         DamaPoos.juego = juego;
@@ -54,7 +56,6 @@ public class DamaPoos implements Serializable {
 
     public DamaPoos(){
 
-        fichas = getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
     }
     public static DamaPoos getJuego(){
         if(juego == null){
@@ -66,17 +67,31 @@ public class DamaPoos implements Serializable {
         juego = new DamaPoos();
     }
 
-    public List<Ficha> getFichas(String color){
-        List<Ficha> fichas = new ArrayList<>();
-        for(int i=0 ; i< 20; i++){
-            Ficha ficha = new Ficha();
-            if(color == VariablesConstantes.COLOR_FICHA_NEGRA){
-                ficha.setColor(VariablesConstantes.COLOR_FICHA_NEGRA);
-                ficha.setImagen("src/presentacion/imagenes/fichaNn.jpg");
+    public boolean posiblesMovimientos(Jugador jugador,int x,int y,int x1,int y1) {
+        boolean seMovio = false;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                tablero = new Ficha[i][j];
+                if((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
+                    fichasJugador1 = jugador.getFichasJugador1();
+                    for (int z=0;z<20;z++){
+                        tablero[i][j] = fichasJugador1.get(z);
+                    }
+                }
+                if ((((i == 8)  || (i==6))&&(j % 2 != 0)) || (((i == 7)|| (i==9))&&(j % 2 == 0))){
+                    fichasJugador2 = jugador.getFichasJugador2();
+                    for (int l=0;l<20;l++){
+                        tablero[i][j] = fichasJugador2.get(l);
+                    }
+                }
+                if(tablero[x1][y1]!= null || tablero[x][y] != tablero[x1][y1]  ){
+                    seMovio = true;
+                }if(((((i == 0) || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))) && (((((i == 8)  || (i==6))&&(j % 2 != 0)) || (((i == 7)|| (i==9))&&(j % 2 == 0))))){
+                    seMovio = true;
+                }
             }
-            fichas.add(ficha);
         }
-        return fichas;
+        return seMovio;
     }
 
 

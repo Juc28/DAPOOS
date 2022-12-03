@@ -6,8 +6,7 @@ public class Elemento {
     private int y;
     private String imagen;
 
-    public Elemento(String color, int x, int y, String imagen) {
-        this.color = color;
+    public Elemento(int x, int y, String imagen) {
         this.x = x;
         this.y = y;
         this.imagen = imagen;
@@ -47,4 +46,6 @@ public class Elemento {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
+
+
 }
