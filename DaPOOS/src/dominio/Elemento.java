@@ -39,13 +39,7 @@ public class Elemento {
         this.y = y;
     }
 
-    public String getImagen() {
-        return imagen;
-    }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
 
 
 }

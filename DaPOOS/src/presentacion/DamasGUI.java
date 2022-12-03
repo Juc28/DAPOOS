@@ -10,6 +10,7 @@ import java.util.List;
 
 import dominio.DamaPoos;
 import dominio.Ficha;
+import dominio.Jugador;
 import dominio.VariablesConstantes;
 
 
@@ -175,6 +176,10 @@ public class DamasGUI extends JFrame {
     private void prepareAccionTablero(){
         inicio.empezar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                Jugador jugador1 = new Jugador(inicio.nombre1.getText(),inicio.Color1.getSelectedItem().toString());
+                Jugador jugador2 = new Jugador(inicio.nombre2.getText(),inicio.Color2.getSelectedItem().toString());
+                Jugador[] jugadors = {jugador1,jugador2};
+                juego.setJugadores(jugadors);
                 prepareElementosTablero();
             }
         });

@@ -21,9 +21,9 @@ public class PantallaInicio extends JPanel {
     public static final String fondoI5 = "src/presentacion/imagenes/fondo5.png";
     protected JButton n,jugadores,maquina,continuar,empezar,atras;
     private BufferedImage fondo;
-    private JComboBox<Object> Color1, Color2,forma;
+    public JComboBox<Object> Color1, Color2,forma;
     private JLabel jugador1, jugador2,titulo1,titulo2;
-    private JTextField nombre1, nombre2,tim,porc;
+    public JTextField nombre1, nombre2,tim,porc;
 
     private JRadioButton radio1,radio2,radio3,radio4;
     private ButtonGroup bg;
@@ -125,15 +125,7 @@ public class PantallaInicio extends JPanel {
         empezar = new JButton("EMPEZAR JUEGO");
         empezar.setBounds(400,350,140,50);
         empezar.setIcon(new ImageIcon("src/presentacion/imagenes/empezar.png"));
-        empezar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Jugador jugador1 = new Jugador(nombre1.getText(),Color1.getSelectedItem().toString());
-                Jugador jugador2 = new Jugador(nombre2.getText(),Color2.getSelectedItem().toString());
-                Jugador[] jugadors = {jugador1,jugador2};
-                juego.setJugadores(jugadors);
-                System.out.println("dgee");
-            }
-        });
+
         atras = new JButton("atras");
         atras.setBounds(5,10,80,20);
         add(atras);

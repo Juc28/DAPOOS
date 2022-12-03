@@ -1,6 +1,7 @@
 package dominio;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Jugador {
@@ -29,11 +30,16 @@ public class Jugador {
         for(int i=0 ; i< 20; i++){
             Ficha ficha = new Ficha();
             ficha.setColor(color);
+            Image imagen;
+            System.out.println("Working Directory = " + System.getProperty("user.dir"));
             if(color == "Negro"){
-                ficha.setIcon(new ImageIcon("src/presentacion/imagen/FichaGg"));
+                imagen = new ImageIcon(getClass().getResource("../presentacion/imagenes/FichaGg.gif")).getImage();
             }else {
-                ficha.setIcon(new ImageIcon("src/presentacion/imagen/FichaRr"));
+                imagen = new ImageIcon(getClass().getResource("../presentacion/imagenes/FichaRr.gif")).getImage();
             }
+            Image newimag = imagen.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+            ImageIcon imagenx = new ImageIcon(newimag);
+            ficha.setIcon(imagenx);
             fichas.add(ficha);
         }
     }
