@@ -2,14 +2,14 @@ package dominio;
 
 public class Elemento {
     private String color;
-    private int x;
-    private int y;
+    private Integer x;
+    private Integer y;
     private String imagen;
 
-    public Elemento(int x, int y, String imagen) {
+    public Elemento(String color,Integer x, Integer y) {
         this.x = x;
         this.y = y;
-        this.imagen = imagen;
+        setColor(color);
     }
 
     public Elemento() {
@@ -23,19 +23,19 @@ public class Elemento {
         this.color = color;
     }
 
-    public int getX() {
+    public Integer getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(Integer x) {
         this.x = x;
     }
 
-    public int getY() {
+    public Integer getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(Integer y) {
         this.y = y;
     }
 

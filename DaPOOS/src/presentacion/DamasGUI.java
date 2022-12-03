@@ -25,7 +25,7 @@ public class DamasGUI extends JFrame {
     private JPanel pantalla;
 
     private Icon icono;
-    private DamaPoos juego;
+    private DamaPoos juego = new DamaPoos();
 
 
     public DamasGUI() {
@@ -37,11 +37,7 @@ public class DamasGUI extends JFrame {
         setIconImage(icon);
     }
 
-    public void comenzarJuego(){
-       DamaPoos.nuevoJuego();
-       juego = DamaPoos.getJuego();
 
-    }
 
     private void prepareElementos() {
 
@@ -143,7 +139,7 @@ public class DamasGUI extends JFrame {
         layout = new CardLayout();
         setSize(new Dimension(900, 540));
         pantalla = new JPanel(layout);
-        inicio = new PantallaInicio(PantallaInicio.fondoI);
+        inicio = new PantallaInicio(PantallaInicio.fondoI,juego);
         pantalla.add(inicio,"t");
         layout.show(pantalla,"t");
         add(pantalla);
@@ -151,7 +147,7 @@ public class DamasGUI extends JFrame {
 
     public void prepareElementosTablero(){
         setSize(900,540);
-        tablero = new Tablero(layout);
+        tablero = new Tablero(layout,juego);
         pantalla.add(tablero,"t");
         layout.show(tablero,"t");
         getContentPane().removeAll();
@@ -179,7 +175,6 @@ public class DamasGUI extends JFrame {
     private void prepareAccionTablero(){
         inicio.empezar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                comenzarJuego();
                 prepareElementosTablero();
             }
         });

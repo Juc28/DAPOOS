@@ -1,7 +1,7 @@
 package dominio;
 
 public class Zombie extends Ficha{
-    public Zombie(int x, int y, String imagen) {
-        super(x, y, imagen);
+    public Zombie(String color,int x, int y) {
+        super(color,x, y);
     }
 }

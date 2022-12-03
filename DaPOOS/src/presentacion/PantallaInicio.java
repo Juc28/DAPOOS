@@ -1,10 +1,14 @@
 package presentacion;
 
+import dominio.DamaPoos;
 import dominio.Ficha;
+import dominio.Jugador;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,12 +27,16 @@ public class PantallaInicio extends JPanel {
 
     private JRadioButton radio1,radio2,radio3,radio4;
     private ButtonGroup bg;
-    public PantallaInicio(String imagen){
+    private DamaPoos juego;
+    public PantallaInicio(String imagen, DamaPoos juego){
         super(null);
+        this.juego = juego;
         prepareElemtosIn();
         setFondo(imagen);
 
     }
+
+
     private void setFondo(String root) {
         try {
             fondo = ImageIO.read(new File(root));
@@ -117,6 +125,15 @@ public class PantallaInicio extends JPanel {
         empezar = new JButton("EMPEZAR JUEGO");
         empezar.setBounds(400,350,140,50);
         empezar.setIcon(new ImageIcon("src/presentacion/imagenes/empezar.png"));
+        empezar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Jugador jugador1 = new Jugador(nombre1.getText(),Color1.getSelectedItem().toString());
+                Jugador jugador2 = new Jugador(nombre2.getText(),Color2.getSelectedItem().toString());
+                Jugador[] jugadors = {jugador1,jugador2};
+                juego.setJugadores(jugadors);
+                System.out.println("dgee");
+            }
+        });
         atras = new JButton("atras");
         atras.setBounds(5,10,80,20);
         add(atras);
@@ -147,6 +164,11 @@ public class PantallaInicio extends JPanel {
         Color2.setBounds(520,280,150,30);
         add(Color2);
         add(empezar);
+        nombre1.setText("Jugador 1");
+        nombre2.setText("Jugador 2");
+        Color1.setSelectedIndex(1);
+        Color2.setSelectedIndex(2);
+
         repaint();
     }
 
