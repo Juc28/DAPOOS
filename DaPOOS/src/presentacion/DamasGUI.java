@@ -154,6 +154,8 @@ public class DamasGUI extends JFrame {
         tablero = new Tablero(layout);
         pantalla.add(tablero,"t");
         layout.show(tablero,"t");
+        getContentPane().removeAll();
+        getContentPane().add(tablero);
 
     }
     private void prepareAccionesJugadores(){
