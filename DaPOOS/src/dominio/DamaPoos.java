@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Math;
+
+import static java.lang.Math.abs;
 
 public class DamaPoos implements Serializable {
     private static DamaPoos juego = null;
@@ -56,7 +59,9 @@ public class DamaPoos implements Serializable {
         }
         ponerFichas();
     }
-
+    public Casilla[][] getTablero(){
+        return tablero;
+    }
     public void ponerFichas(){
         Jugador jugadorNegro = getJugadorByColor("Negro");
         Jugador jugadorRojo = getJugadorByColor("Rojo");
@@ -107,32 +112,27 @@ public class DamaPoos implements Serializable {
     }
 
 
-//    public boolean posiblesMovimientos(Jugador jugador,int x,int y,int x1,int y1) {
-//        boolean seMovio = false;
-//        for (int i = 0; i < 10; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                tablero = new Ficha[i][j];
-//                if((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
-//                    fichasJugador1 = jugador.getFichasJugador1();
-//                    for (int z=0;z<20;z++){
-//                        tablero[i][j] = fichasJugador1.get(z);
-//                    }
-//                }
-//                if ((((i == 8)  || (i==6))&&(j % 2 != 0)) || (((i == 7)|| (i==9))&&(j % 2 == 0))){
-//                    fichasJugador2 = jugador.getFichasJugador2();
-//                    for (int l=0;l<20;l++){
-//                        tablero[i][j] = fichasJugador2.get(l);
-//                    }
-//                }
-//                if(tablero[x1][y1]!= null || tablero[x][y] != tablero[x1][y1]  ){
-//                    seMovio = true;
-//                }if(((((i == 0) || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))) && (((((i == 8)  || (i==6))&&(j % 2 != 0)) || (((i == 7)|| (i==9))&&(j % 2 == 0))))){
-//                    seMovio = true;
-//                }
-//            }
-//        }
-//        return seMovio;
-//    }
+    private boolean posiblesMovimientos(Jugador jugador,Casilla inicio,Casilla fin) {
 
+        if(jugador.getColor() != inicio.getFicha().getColor()){
+            return false;
+        }
+        if (fin.getColor() != "Negro"){
+            return false;
+        }
+        if(inicio.getFicha() == null){
+            return false;
+        }
+        if(abs(inicio.getY() - fin.getY()) > 1){
+            return false;
+        }
+        return true;
+    }
 
+    public void movimientoRequerido(Jugador jugador,Casilla inicio,Casilla fin){
+        if(posiblesMovimientos(jugador,inicio,fin)){
+            fin.setFicha(inicio.getFicha());
+            inicio.setFicha(null);
+        }
+    }
 }

@@ -6,7 +6,6 @@ import java.awt.*;
 public class Ficha extends Elemento {
 
     private ImageIcon icon;
-    private String[][] tablero;
 
     public Ficha(String color,Integer x, Integer y) {
         super(color, x, y);
@@ -17,7 +16,9 @@ public class Ficha extends Elemento {
     public void setIcon(ImageIcon icon) {
         this.icon = icon;
     }
-
+    public ImageIcon getIcon(){
+        return icon;
+    }
 
 
 
