@@ -1,6 +1,8 @@
 package dominio;
 
-public class Casilla extends Elemento{
+import java.io.Serializable;
+
+public class Casilla extends Elemento implements Serializable {
     private Ficha ficha;
     public Casilla(String color, int x, int y) {
         super(color,x, y);

@@ -2,9 +2,10 @@ package dominio;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Jugador {
+public class Jugador implements Serializable {
     private String nombre;
     private String color;
     private ArrayList<Ficha> fichas;
@@ -25,6 +26,8 @@ public class Jugador {
     }
 
     public String getColor(){return color;}
+
+    public void setColor(String color){this.color = color;}
     public void setFichas(String color) {
         fichas = new ArrayList<Ficha>();
         for(int i=0 ; i< 20; i++){
@@ -32,7 +35,7 @@ public class Jugador {
             ficha.setColor(color);
             Image imagen;
             System.out.println("Working Directory = " + System.getProperty("user.dir"));
-            if(color == "Negro"){
+            if(color.equalsIgnoreCase("Negro")){
                 imagen = new ImageIcon(getClass().getResource("../presentacion/imagenes/FichaGg.gif")).getImage();
             }else {
                 imagen = new ImageIcon(getClass().getResource("../presentacion/imagenes/FichaRr.gif")).getImage();
