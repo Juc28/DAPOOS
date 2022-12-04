@@ -2,8 +2,9 @@ package dominio;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 
-public class Ficha extends Elemento {
+public class Ficha extends Elemento implements Serializable {
 
     private ImageIcon icon;
 

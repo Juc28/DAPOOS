@@ -1,6 +1,8 @@
 package dominio;
 
-public class Elemento {
+import java.io.Serializable;
+
+public class Elemento implements Serializable {
     private String color;
     private Integer x;
     private Integer y;

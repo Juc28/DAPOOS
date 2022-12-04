@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
+import java.io.*;
 import java.util.List;
 
 import dominio.DamaPoos;
@@ -27,6 +27,9 @@ public class DamasGUI extends JFrame {
 
     private Icon icono;
     private DamaPoos juego = new DamaPoos();
+    public void setTitulo(String titulo){
+        this.setTitle(titulo);
+    }
 
 
     public DamasGUI() {
@@ -79,7 +82,11 @@ public class DamasGUI extends JFrame {
         });
         open.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
-                accionOpenFile();
+                try {
+                    accionOpenFile();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         save.addActionListener(new ActionListener() {
@@ -94,23 +101,50 @@ public class DamasGUI extends JFrame {
         });
     }
 
-    private void accionOpenFile() {
-        fileChooser.setVisible(true);
-        int seleccion = fileChooser.showOpenDialog(open);
-        if (seleccion == JFileChooser.APPROVE_OPTION) {
-            File fichero = fileChooser.getSelectedFile();
-            JOptionPane.showMessageDialog(open, "El archivo " + fichero + " no se puede abrir porque las funcionalidades estan en construccion ");
+    private void accionOpenFile() throws IOException {
+//        fileChooser.setVisible(true);
+//        int seleccion = fileChooser.showOpenDialog(open);
+//        if (seleccion == JFileChooser.APPROVE_OPTION) {
+//            File fichero = fileChooser.getSelectedFile();
+//            JOptionPane.showMessageDialog(open, "El archivo " + fichero + " no se puede abrir porque las funcionalidades estan en construccion ");
+//        }
+        FileInputStream fis;
+        ObjectInputStream ois;
+        fis = new FileInputStream("Juego_Guardado.ser");
+        ois = new ObjectInputStream(fis);
+        try {
+            while (true) {
+                juego = (DamaPoos) ois.readObject();
+
+            }
+        } catch (OptionalDataException e) {
+//            if (!e.eof)
+//                throw e;
         }
+          catch (IOException e) {
+            //throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            //throw new RuntimeException(e);
+        } finally {
+            ois.close();
+            fis.close();
+        }
+        prepareElementosTablero();
     }
 
     private void accionSaveFile() {
-        fileChooser.setVisible(true);
-        int seleccion = fileChooser.showSaveDialog(save);
-        if (seleccion == JFileChooser.APPROVE_OPTION) {
-            File fichero = fileChooser.getSelectedFile();
-            JOptionPane.showMessageDialog(save, "El archivo en la ruta " + fichero + " no se puede guardar porque las funcionalidades estan en construccion ");
+//        fileChooser.setVisible(true);
+//        int seleccion = fileChooser.showSaveDialog(save);
+//        if (seleccion == JFileChooser.APPROVE_OPTION) {
+//            File fichero = fileChooser.getSelectedFile();
+            try {
+                tablero.guardar(juego);
+            }catch (IOException e){
+                System.out.println(e.toString());
+            }
+
         }
-    }
+    //}
 
     private void setDefaultCloseOperation() {
         int confirm = JOptionPane.showConfirmDialog(exit, "Are you sure you want to exit?");
