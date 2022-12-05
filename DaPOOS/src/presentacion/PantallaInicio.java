@@ -25,7 +25,7 @@ public class PantallaInicio extends JPanel {
     private JLabel jugador1, jugador2,titulo1,titulo2;
     public JTextField nombre1, nombre2,tim,porc;
 
-    private JRadioButton radio1,radio2,radio3,radio4;
+    public JRadioButton radio1,radio2,radio3,radio4;
     private ButtonGroup bg;
     private DamaPoos juego;
     public PantallaInicio(String imagen, DamaPoos juego){
@@ -99,6 +99,9 @@ public class PantallaInicio extends JPanel {
         add(forma);
         radio4=new JRadioButton("No");
         radio4.setBounds(480,320,50,30);
+        porc.setText("50");
+        forma.setSelectedIndex(2);
+        radio3.setSelected(true);
         add(radio4);
         repaint();
     }

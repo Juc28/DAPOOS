@@ -1,5 +1,6 @@
 package presentacion;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,7 @@ import dominio.DamaPoos;
 import dominio.Ficha;
 import dominio.Jugador;
 import dominio.VariablesConstantes;
+import javax.swing.Timer;
 
 
 public class DamasGUI extends JFrame {
@@ -102,15 +104,18 @@ public class DamasGUI extends JFrame {
     }
 
     private void accionOpenFile() throws IOException {
-//        fileChooser.setVisible(true);
-//        int seleccion = fileChooser.showOpenDialog(open);
-//        if (seleccion == JFileChooser.APPROVE_OPTION) {
-//            File fichero = fileChooser.getSelectedFile();
-//            JOptionPane.showMessageDialog(open, "El archivo " + fichero + " no se puede abrir porque las funcionalidades estan en construccion ");
-//        }
+        fileChooser = new JFileChooser("C:");
+        fileChooser.setVisible(true);
+//        FileNameExtensionFilter filter = new FileNameExtensionFilter("DamaPoos (.ser)", ".ser");
+//        fileChooser.addChoosableFileFilter(filter);
+        int seleccion = fileChooser.showOpenDialog(open);
+        File file = null;
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            file= fileChooser.getSelectedFile();
+        }
         FileInputStream fis;
         ObjectInputStream ois;
-        fis = new FileInputStream("Juego_Guardado.ser");
+        fis = new FileInputStream(file);
         ois = new ObjectInputStream(fis);
         try {
             while (true) {
@@ -133,18 +138,19 @@ public class DamasGUI extends JFrame {
     }
 
     private void accionSaveFile() {
-//        fileChooser.setVisible(true);
-//        int seleccion = fileChooser.showSaveDialog(save);
-//        if (seleccion == JFileChooser.APPROVE_OPTION) {
-//            File fichero = fileChooser.getSelectedFile();
+        fileChooser.setVisible(true);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("DamaPoos (.ser)", ".ser");
+        fileChooser.setFileFilter(filter);
+        int seleccion = fileChooser.showSaveDialog(save);
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
             try {
-                tablero.guardar(juego);
+                tablero.guardar(juego,file);
             }catch (IOException e){
                 System.out.println(e.toString());
             }
-
         }
-    //}
+    }
 
     private void setDefaultCloseOperation() {
         int confirm = JOptionPane.showConfirmDialog(exit, "Are you sure you want to exit?");
@@ -210,14 +216,31 @@ public class DamasGUI extends JFrame {
     private void prepareAccionTablero(){
         inicio.empezar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                juego.permitirEspeciales = inicio.radio3.isSelected();
+                juego.porcentajeCasillasEspeciales = Integer.parseInt(inicio.porc.getText());
+                juego.formaDeAparecen = inicio.forma.getSelectedIndex();
                 Jugador jugador1 = new Jugador(inicio.nombre1.getText(),inicio.Color1.getSelectedItem().toString());
                 Jugador jugador2 = new Jugador(inicio.nombre2.getText(),inicio.Color2.getSelectedItem().toString());
                 Jugador[] jugadors = {jugador1,jugador2};
                 juego.setJugadores(jugadors);
                 prepareElementosTablero();
+                limpiarCasillasEspeciales();
+
             }
         });
 
+    }
+
+    private void limpiarCasillasEspeciales(){
+        Timer timer = new Timer(3000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                System.out.println("timer 5");
+                juego.noVerCasillaEspeciales();
+            }
+        });
+        timer.setRepeats(false); // Only execute once
+        timer.start(); // Go go go!
     }
     private void prepareAccionAtras1(){
         inicio.atras.addActionListener(new ActionListener() {
