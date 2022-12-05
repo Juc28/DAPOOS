@@ -58,12 +58,10 @@ public class Tablero extends JPanel {
                         if(casillaFutura.ficha == null){
                             System.out.println("No hay una ficha");
                             if(casillaInicial != null){
-                                Integer moviento = juego.movimientoRequerido(juego.getTurno(),casillaInicial.casilla,casillaFutura.casilla);
+                                int moviento = juego.movimientoRequerido(juego.getTurno(),casillaInicial.casilla,casillaFutura.casilla);
                                 if(moviento == 2){
-                                    opcionesFichas();
-                                }
-                                if (moviento != null){
-
+                                    int opciones = opcionesFichas();
+                                    juego.fichaSeConvierteEnEspecial(casillaFutura.casilla,opciones);
                                 }
                                 removeAll();
                                 revalidate();
@@ -80,7 +78,14 @@ public class Tablero extends JPanel {
                 if (casilla.getColor().equalsIgnoreCase( "Negro")) {
                     boardSquare.setBackground(colorNegro);
                     boardSquare.emptyColor = colorNegro;
-                }if (casilla.getFicha() != null){
+                }else {
+                    if (casilla instanceof Mine){
+                        boardSquare.setBackground(Color.ORANGE);
+                    }else {
+                        boardSquare.setBackground(Color.WHITE);
+                    }
+                }
+                if (casilla.getFicha() != null){
                     boardSquare.ficha = casilla.getFicha();
                     boardSquare.setIcon(casilla.getFicha().getIcon());
                 }
@@ -94,7 +99,7 @@ public class Tablero extends JPanel {
         repaint();
     }
 
-    public void opcionesFichas(){
+    public int opcionesFichas(){
         String[] botones = {"Ninja", "Reina", "Zombie"};
         int ventana = JOptionPane.showOptionDialog(null,
                 "Elije tu ficha:",
@@ -105,6 +110,7 @@ public class Tablero extends JPanel {
         if(ventana == 0) {System.out.println("Ninja");}
         else if(ventana == 1) {System.out.println("Reina");}
         else if(ventana == 2) {System.out.println("Zombie");}
+        return ventana;
     }
     void prepareElementosInformacion() {
         JLabel c = new JLabel("Información del juego actual");
@@ -128,11 +134,16 @@ public class Tablero extends JPanel {
         add(terminar);
     }
 
-    public void guardar(DamaPoos juego) throws IOException {
-            FileOutputStream fileOut = new FileOutputStream("Juego_Guardado.ser");
+    public void guardar(DamaPoos juego,File file) throws IOException {
+            String nombre = file.getAbsolutePath();
+        if(!nombre.endsWith(".ser") ) {
+            file = new File(nombre + ".ser");
+        }
+            FileOutputStream fileOut = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(juego);
             out.close();
+
     }
 
     private void setFondo(String root) {
