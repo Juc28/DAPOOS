@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class Tablero extends JPanel {
-    //private List<Ficha> fichas = DamaPoos.getJuego().getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
     protected JButton terminar;
     private JButton[][] boton;
     private BufferedImage fondo;
@@ -67,7 +66,6 @@ public class Tablero extends JPanel {
                                 revalidate();
                                 repaint();
                                 crearTablero();
-
                             }
                         }else {
                             casillaInicial = (casillaFutura == casillaInicial)? null: casillaFutura;
@@ -89,21 +87,25 @@ public class Tablero extends JPanel {
                     boardSquare.ficha = casilla.getFicha();
                     boardSquare.setIcon(casilla.getFicha().getIcon());
                 }
-
                 boton[i][j] = boardSquare;
                 juegoPanel.add(boton[i][j]);
             }
-
         }
         add(juegoPanel, BorderLayout.CENTER);
         repaint();
     }
 
+
+
+    /**
+     *
+     * @return
+     */
     public int opcionesFichas(){
         String[] botones = {"Ninja", "Reina", "Zombie"};
         int ventana = JOptionPane.showOptionDialog(null,
                 "Elije tu ficha:",
-                "Javadesde0.com",
+                "FICHAS ",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null,
                 botones, botones[0]);

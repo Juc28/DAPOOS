@@ -25,16 +25,29 @@ public class Jugador implements Serializable {
         this.nombre = nombre;
     }
 
+    /**
+     * Retorna el color de las fichas que tiene el jugador
+     * @return
+     */
     public String getColor(){return color;}
 
+    /**
+     * Le da el color a las ficahs del jugador
+     * @param color
+     */
     public void setColor(String color){this.color = color;}
+
+    /**
+     * Le da las fichas a cada jugador depentiendo el color que escoja el jugador
+     * @param color
+     */
     public void setFichas(String color) {
         fichas = new ArrayList<Ficha>();
         for(int i=0 ; i< 20; i++){
             Ficha ficha = new Ficha();
             ficha.setColor(color);
             Image imagen;
-            System.out.println("Working Directory = " + System.getProperty("user.dir"));
+            //System.out.println("Working Directory = " + System.getProperty("user.dir"));
             if(color.equalsIgnoreCase("Negro")){
                 imagen = new ImageIcon(getClass().getResource("../presentacion/imagenes/FichaGg.gif")).getImage();
             }else {
@@ -46,21 +59,16 @@ public class Jugador implements Serializable {
             fichas.add(ficha);
         }
     }
-    public ArrayList<Ficha> getFichas(){return fichas;}
+
+    /**
+     * Retorna las fichas del jugador que no han puesto en el tablero
+     * @return
+     */
     public Ficha getFichaNoEnTablero(){
         for (Ficha ficha:fichas){
-            if(ficha.getX() == null && ficha.getY() == null){
-                return ficha;
-            }
+            if(ficha.getX() == null && ficha.getY() == null){return ficha;}
         }
         return null;
     }
 
-    public int[] getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int[] estado) {
-        this.estado = estado;
-    }
 }

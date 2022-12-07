@@ -9,10 +9,8 @@ import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.List;
 
-import dominio.DamaPoos;
-import dominio.Ficha;
-import dominio.Jugador;
-import dominio.VariablesConstantes;
+import dominio.*;
+
 import javax.swing.Timer;
 
 
@@ -21,7 +19,7 @@ public class DamasGUI extends JFrame {
     private Tablero tablero;
     private JMenuBar menu;
     private JMenu file;
-    private JMenuItem open, save, saveas, exit;
+    private JMenuItem open, save, exit,terminar;
     private JFileChooser fileChooser;
 
     private  CardLayout layout;
@@ -29,6 +27,8 @@ public class DamasGUI extends JFrame {
 
     private Icon icono;
     private DamaPoos juego = new DamaPoos();
+
+
     public void setTitulo(String titulo){
         this.setTitle(titulo);
     }
@@ -41,6 +41,19 @@ public class DamasGUI extends JFrame {
         ImageIcon icono = new ImageIcon("src/presentacion/imagenes/log.png");
         Image icon = icono.getImage();
         setIconImage(icon);
+        juego.addEventListener(new MiEventoEscuchador() {
+            @Override
+            public void onJuegoTerminado(Jugador jugador) {
+                //TODO:Agregar ventana
+                //JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
+                System.out.println("Juego Terminado"+jugador.getColor());
+            }
+            @Override
+            public void onJugarCambio(Jugador jugador){
+                JOptionPane.showMessageDialog(null,"Turno de:"+jugador.getColor());
+                //setTitulo(jugador.getColor());
+            }
+        });
     }
 
 
@@ -96,11 +109,14 @@ public class DamasGUI extends JFrame {
                 accionSaveFile();
             }
         });
-        saveas.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                accionSaveFile();
-            }
-        });
+//        terminar.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                setSize(new Dimension(900, 590));
+//                inicio.prepareElemtosIn();
+//                prepareActions();
+//            }
+//        });
+
     }
 
     private void accionOpenFile() throws IOException {
@@ -169,10 +185,10 @@ public class DamasGUI extends JFrame {
         file.add(open);
         save = new JMenuItem("Save");
         file.add(save);
-        saveas = new JMenuItem("Save As...");
-        file.add(saveas);
         exit = new JMenuItem("Exit");
         file.add(exit);
+        terminar = new JMenuItem("Terminar Juego");
+        file.add(terminar);
     }
 
 
@@ -266,20 +282,10 @@ public class DamasGUI extends JFrame {
                 setSize(new Dimension(900, 590));
                 inicio.prepararElementosJugadores();
                 prepareAccionesJugadores();
-
             }
         });
     }
-    private void prepareAccionEmpezarN(){
 
-        tablero.terminar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setSize(new Dimension(900, 590));
-                inicio.prepareElemtosIn();
-                prepareActions();
-            }
-        });
-    }
     public static void main(String[] args) {
         DamasGUI gui = new DamasGUI();
         gui.setVisible(true);
