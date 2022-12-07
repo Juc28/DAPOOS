@@ -17,6 +17,8 @@ public class Elemento implements Serializable {
     public Elemento() {
     }
 
+
+
     public String getColor() {
         return color;
     }

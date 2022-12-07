@@ -46,12 +46,17 @@ public class DamasGUI extends JFrame {
             public void onJuegoTerminado(Jugador jugador) {
                 //TODO:Agregar ventana
                 //JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
-                System.out.println("Juego Terminado"+jugador.getColor());
+                //System.out.println("Juego Terminado"+jugador.getColor());
             }
             @Override
             public void onJugarCambio(Jugador jugador){
-                JOptionPane.showMessageDialog(null,"Turno de:"+jugador.getColor());
-                //setTitulo(jugador.getColor());
+                //JOptionPane.showMessageDialog(null,"Turno de:"+jugador.getColor());
+                setTitulo("DAMAPOOS - " + jugador.getColor());
+            }
+
+            @Override
+            public void onComodinGun(Jugador jugador) {
+
             }
         });
     }
@@ -155,8 +160,8 @@ public class DamasGUI extends JFrame {
 
     private void accionSaveFile() {
         fileChooser.setVisible(true);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("DamaPoos (.ser)", ".ser");
-        fileChooser.setFileFilter(filter);
+//        FileNameExtensionFilter filter = new FileNameExtensionFilter("DamaPoos (.ser)", ".ser");
+//        fileChooser.setFileFilter(filter);
         int seleccion = fileChooser.showSaveDialog(save);
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
@@ -251,7 +256,7 @@ public class DamasGUI extends JFrame {
         Timer timer = new Timer(3000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println("timer 5");
+                //System.out.println("timer 5");
                 juego.noVerCasillaEspeciales();
             }
         });
