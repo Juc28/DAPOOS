@@ -9,9 +9,17 @@ public class Casilla extends Elemento implements Serializable {
 
     }
 
+    /**
+     * Coloca la ficha en un casilla
+     * @param ficha
+     */
     public void setFicha(Ficha ficha){
         this.ficha = ficha;
     }
 
+    /**
+     * Retorna la ficha que esta en la casilla
+     * @return
+     */
     public Ficha getFicha(){return ficha;}
 }

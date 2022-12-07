@@ -13,6 +13,11 @@ public class Ficha extends Elemento implements Serializable {
     }
     public Ficha(){}
 
+    public Ficha(int x, int y) {
+        super.setX(x);
+        super.setY(y);
+    }
+
 
     public void setIcon(ImageIcon icon) {
         this.icon = icon;

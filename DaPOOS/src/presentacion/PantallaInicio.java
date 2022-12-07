@@ -20,7 +20,7 @@ public class PantallaInicio extends JPanel {
     public static final String fondoI4 = "src/presentacion/imagenes/fondo2.png";
     public static final String fondoI5 = "src/presentacion/imagenes/fondo5.png";
     protected JButton n,jugadores,maquina,continuar,empezar,atras;
-    private BufferedImage fondo;
+    private transient BufferedImage fondo;
     public JComboBox<Object> Color1, Color2,forma;
     private JLabel jugador1, jugador2,titulo1,titulo2;
     public JTextField nombre1, nombre2,tim,porc;

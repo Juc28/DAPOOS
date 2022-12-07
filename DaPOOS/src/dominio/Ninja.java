@@ -21,7 +21,6 @@ public class Ninja extends Ficha implements Serializable {
 
     private boolean tieneVidas = true;
 
-
     public boolean getTieneVidas(){
         return tieneVidas;
     }

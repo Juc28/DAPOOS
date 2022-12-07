@@ -1,20 +1,16 @@
 package presentacion;
 import dominio.*;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class Tablero extends JPanel {
-    //private List<Ficha> fichas = DamaPoos.getJuego().getFichas(VariablesConstantes.COLOR_FICHA_NEGRA);
     protected JButton terminar;
     private JButton[][] boton;
-    private BufferedImage fondo;
     private DamaPoos juego;
+    public Jugador jugadorEspecial = null; //Que jugador gano el comodin
 
 
     public Tablero(CardLayout layout,DamaPoos juego) {
@@ -22,11 +18,32 @@ public class Tablero extends JPanel {
         this.juego = juego;
         juego.setTablero();
         removeAll();
-        setFondo(PantallaInicio.fondoI3);
         //prepararElementosTerminar();
         //prepareElementosInformacion();
         crearTablero();
+        juego.addEventListener(new MiEventoEscuchador() {
+            @Override
+            public void onJuegoTerminado(Jugador jugador) {
+                //TODO:Agregar ventana
+                //JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
+                //System.out.println("Juego Terminado"+jugador.getColor());
+            }
+            @Override
+            public void onJugarCambio(Jugador jugador){
+                //JOptionPane.showMessageDialog(null,"Turno de:"+jugador.getColor());
+                //setTitulo("DAMAPOOS - " + jugador.getColor());
+            }
+
+            @Override
+            public void onComodinGun(Jugador jugador) {
+                System.out.println("Si funciono Gun");
+                jugadorEspecial = jugador;
+                //juego.setTurno(jugador);
+
+            }
+        });
     }
+
     BoardSquare casillaInicial;
     public class BoardSquare extends JButton{
         public Casilla casilla;
@@ -56,21 +73,28 @@ public class Tablero extends JPanel {
                     public void actionPerformed(ActionEvent e) {
                         BoardSquare casillaFutura = (BoardSquare)e.getSource();
                         if(casillaFutura.ficha == null){
-                            System.out.println("No hay una ficha");
                             if(casillaInicial != null){
+
                                 int moviento = juego.movimientoRequerido(juego.getTurno(),casillaInicial.casilla,casillaFutura.casilla);
                                 if(moviento == 2){
                                     int opciones = opcionesFichas();
                                     juego.fichaSeConvierteEnEspecial(casillaFutura.casilla,opciones);
                                 }
-                                removeAll();
-                                revalidate();
-                                repaint();
-                                crearTablero();
-
+                               actulizarTablero();
                             }
                         }else {
-                            casillaInicial = (casillaFutura == casillaInicial)? null: casillaFutura;
+                            if(juego.eliminarPorGun){
+                                juego.setTurno(jugadorEspecial);
+                                if(juego.removerFicha(casillaFutura.casilla,jugadorEspecial)){
+                                    jugadorEspecial = null;
+                                    juego.eliminarPorGun = false;
+                                    juego.cambioTurno();
+                                    actulizarTablero();
+                                }
+                                System.out.println("Llego al gun");
+                            }else {
+                                casillaInicial = (casillaFutura == casillaInicial) ? null : casillaFutura;
+                            }
                         }
                     }
                 });
@@ -89,21 +113,30 @@ public class Tablero extends JPanel {
                     boardSquare.ficha = casilla.getFicha();
                     boardSquare.setIcon(casilla.getFicha().getIcon());
                 }
-
                 boton[i][j] = boardSquare;
                 juegoPanel.add(boton[i][j]);
             }
-
         }
         add(juegoPanel, BorderLayout.CENTER);
         repaint();
     }
 
+    public void actulizarTablero(){
+        removeAll();
+        revalidate();
+        repaint();
+        crearTablero();
+    }
+
+    /**
+     *
+     * @return
+     */
     public int opcionesFichas(){
         String[] botones = {"Ninja", "Reina", "Zombie"};
         int ventana = JOptionPane.showOptionDialog(null,
                 "Elije tu ficha:",
-                "Javadesde0.com",
+                "FICHAS ",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null,
                 botones, botones[0]);
@@ -146,13 +179,7 @@ public class Tablero extends JPanel {
 
     }
 
-    private void setFondo(String root) {
-        try {
-            fondo = ImageIO.read(new File(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
 }
 
