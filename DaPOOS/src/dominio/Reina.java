@@ -3,7 +3,11 @@ package dominio;
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
-
+/**
+ * Esta clase contiene las características de una ficha reina que es un tipo especial en el juego de Dapoos
+ * @author Erika Juliana Castro Romero y Mariana Pulido Moreno
+ * @version 5.0
+ */
 public class Reina extends Ficha implements Serializable {
     /**
      * Constructor de la clase Reina

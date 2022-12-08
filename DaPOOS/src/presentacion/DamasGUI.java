@@ -1,16 +1,12 @@
 package presentacion;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
-import java.util.List;
-
 import dominio.*;
-
 import javax.swing.Timer;
 
 
@@ -21,18 +17,15 @@ public class DamasGUI extends JFrame {
     private JMenu file;
     private JMenuItem open, save, exit,terminar;
     private JFileChooser fileChooser;
-
     private  CardLayout layout;
     private JPanel pantalla;
 
-    private Icon icono;
     private DamaPoos juego = new DamaPoos();
 
 
     public void setTitulo(String titulo){
         this.setTitle(titulo);
     }
-
 
     public DamasGUI() {
         super("DamaPoos");

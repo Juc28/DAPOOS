@@ -3,8 +3,19 @@ package dominio;
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
-
+/**
+ * Esta clase contiene las características de una ficha ninja que es un tipo especial en el juego de Dapoos
+ * @author Erika Juliana Castro Romero y Mariana Pulido Moreno
+ * @version 5.0
+ */
 public class Ninja extends Ficha implements Serializable {
+    private boolean tieneVidas = true;
+    /**
+     * Constructor de la clase ninja
+     * @param color
+     * @param x
+     * @param y
+     */
     public Ninja(String color,int x, int y) {
         super(color, x, y);
         Image imagen;
@@ -19,11 +30,17 @@ public class Ninja extends Ficha implements Serializable {
 
     }
 
-    private boolean tieneVidas = true;
-
+    /**
+     * Retorna si esta ficha perdio la vida
+     * @return
+     */
     public boolean getTieneVidas(){
         return tieneVidas;
     }
+
+    /**
+     * Verifica si la ficha ninja ya perdio una vez la vida para cambiar y saber que solo tiene otra vida más
+     */
     public void removerVidas(){
         tieneVidas = false;
         Image imagen;

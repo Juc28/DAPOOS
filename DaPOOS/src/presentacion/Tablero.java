@@ -25,7 +25,7 @@ public class Tablero extends JPanel {
             @Override
             public void onJuegoTerminado(Jugador jugador) {
                 //TODO:Agregar ventana
-                //JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
+                JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
                 //System.out.println("Juego Terminado"+jugador.getColor());
             }
             @Override
@@ -85,7 +85,7 @@ public class Tablero extends JPanel {
                         }else {
                             if(juego.eliminarPorGun){
                                 juego.setTurno(jugadorEspecial);
-                                if(juego.removerFicha(casillaFutura.casilla,jugadorEspecial)){
+                                if(juego.removerFichaContricante(casillaFutura.casilla,jugadorEspecial)){
                                     jugadorEspecial = null;
                                     juego.eliminarPorGun = false;
                                     juego.cambioTurno();
