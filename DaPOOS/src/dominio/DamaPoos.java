@@ -14,7 +14,7 @@ import static java.lang.Math.abs;
  */
 public class DamaPoos implements Serializable {
     private static DamaPoos juego = null;
-    private Casilla[][] tablero;
+    public Casilla[][] tablero;
     private Jugador[] jugadores;
     private Jugador turno;
     public boolean enProgreso;
@@ -23,6 +23,7 @@ public class DamaPoos implements Serializable {
     public int formaDeAparecen;
     public boolean eliminarPorGun = false;
     private List<MiEventoEscuchador> eventoEscuchadors = new ArrayList<MiEventoEscuchador>();
+    private static boolean ok;
 
     /**
      *
@@ -38,6 +39,7 @@ public class DamaPoos implements Serializable {
      */
     public static void setJuego(DamaPoos juego) {
         DamaPoos.juego = juego;
+        ok = true;
     }
 
     /**
@@ -67,7 +69,10 @@ public class DamaPoos implements Serializable {
         this.jugadores = jugadores;
         for(Jugador jugador: jugadores){
             jugador.setFichas(jugador.getColor());
-            if (jugador.getColor().equalsIgnoreCase("Negro")){turno = jugador;}
+            if (jugador.getColor().equalsIgnoreCase("Negro")){
+                turno = jugador;
+                ok = true;
+            }
         }
     }
 
@@ -98,9 +103,11 @@ public class DamaPoos implements Serializable {
                 if (((j % 2 == 0) && (i % 2 != 0)) || ((j % 2 != 0) && (i % 2 == 0))) {
                     Casilla casilla = new Casilla("Negro",i,j);
                     tablero[i][j] = casilla;
+                    ok = true;
                 }else {
                     Casilla casilla = new Casilla("Blanco",i,j);
                     tablero[i][j] = casilla;
+                    ok = true;
                 }
             }
         }
@@ -151,6 +158,7 @@ public class DamaPoos implements Serializable {
                         tablero[i][j].setFicha(ficha);
                         ficha.setX(i);
                         ficha.setY(j);
+                        ok = true;
                     }
 
                 }if ((((i == 8)  || (i==6))&&(j % 2 != 0)) || (((i == 7)|| (i==9))&&(j % 2 == 0))){
@@ -172,7 +180,7 @@ public class DamaPoos implements Serializable {
      * @param fin - la casilla en la que va quedar
      * @return false cuando cumple uno de los momientos no aceptados
      */
-    private boolean posiblesMovimientos(Jugador jugador,Casilla inicio,Casilla fin) {
+    public boolean posiblesMovimientos(Jugador jugador,Casilla inicio,Casilla fin) {
         if(jugador.getColor() != inicio.getFicha().getColor()){return false;}
         if (fin.getColor().equalsIgnoreCase("Blanco")){return false;}
         if(inicio.getFicha() == null){return false;}
@@ -195,14 +203,16 @@ public class DamaPoos implements Serializable {
      * Elimina las fichas cuando una paso por encima otra ficha
      * @param casilla
      */
-    private void eliminarFichas(Casilla casilla,Jugador jugador){
+    public void eliminarFichas(Casilla casilla,Jugador jugador){
         if(casilla.getFicha() != null){
             Jugador enemigo = getJugadorByColor(casilla.getFicha().getColor());
+            ok = true;
             if(casilla.getFicha() instanceof Gun){
                 eventoEscuchadors.forEach((el) -> el.onComodinGun(jugador));
                 eliminarPorGun = true;
                 casilla.getFicha().fichaEnJuego = false;
                 casilla.setFicha(null);
+                ok = true;
             }
             casilla.getFicha().fichaEnJuego = false;
             casilla.setFicha(null);
@@ -210,8 +220,10 @@ public class DamaPoos implements Serializable {
                 Jugador jugadorGanador;
                 if(enemigo.getColor() == "Rojo") {
                     jugadorGanador = getJugadorByColor("Negro");
+                    ok = true;
                 }else {
                     jugadorGanador = getJugadorByColor("Rojo");
+                    ok = true;
                 }
                 eventoEscuchadors.forEach((el) -> el.onJuegoTerminado(jugadorGanador));
             }
@@ -311,14 +323,17 @@ public class DamaPoos implements Serializable {
         if(tipo == 0){
             Ninja fichaNinja = new Ninja(casilla.getFicha().getColor(), casilla.getX(),casilla.getY());
             casilla.setFicha(fichaNinja);
+            ok = true;
             System.out.println(casilla.getFicha().getClass());
         }if(tipo == 1){
             Reina fichaReina = new Reina(casilla.getFicha().getColor(), casilla.getX(),casilla.getY());
             casilla.setFicha(fichaReina);
+            ok = true;
             System.out.println(casilla.getFicha().getClass());
         }if(tipo == 2){
             Zombie fichaZombie = new Zombie(casilla.getFicha().getColor(), casilla.getX(),casilla.getY());
             casilla.setFicha(fichaZombie);
+            ok = true;
             System.out.println(casilla.getFicha().getClass());
         }
     }
@@ -348,6 +363,7 @@ public class DamaPoos implements Serializable {
             switch (numeroAleatorioComodines){
                 case 1: // Hace refencia al comodin gun
                     setComodinesAleatoria(new Gun());
+                    ok = true;
                     break;
                 case 2: //
                     break;
@@ -368,6 +384,7 @@ public class DamaPoos implements Serializable {
             int yAleatorio = getNumerosAleatorias(0, 9);
             Casilla casilla = tablero[xAleatorio][yAleatorio];
             if (!casilla.getColor().equalsIgnoreCase("Blanco") && casilla.getFicha() == null) {
+                ok = true;
                 comodin.setX(xAleatorio);
                 comodin.setY(yAleatorio);
                 tablero[xAleatorio][yAleatorio].setFicha(comodin);
@@ -385,9 +402,13 @@ public class DamaPoos implements Serializable {
                 Casilla casilla = tablero[i][j];
                 if(casilla instanceof Mine){
                     casilla.setColor("Negro");
+                    ok = true;
                 }
             }
         }
+    }
+    public boolean ok(){
+        return ok;
     }
 
 }
