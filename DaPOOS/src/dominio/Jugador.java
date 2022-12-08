@@ -1,36 +1,35 @@
 package dominio;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Esta clase contiene las características del jugador en el juego de Dapoos
+ * @author Erika Juliana Castro Romero y Mariana Pulido Moreno
+ * @version 5.0
+ */
 public class Jugador implements Serializable {
     private String nombre;
     private String color;
     private ArrayList<Ficha> fichas;
-    private int[] estado;
 
+    /**
+     * Constructor de la case jugador
+     * @param nombre
+     * @param color
+     */
     public Jugador(String nombre, String color) {
         this.nombre = nombre;
         this.color = color;
-
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     /**
      * Retorna el color de las fichas que tiene el jugador
-     * @return
+     * @return color
      */
     public String getColor(){return color;}
-
+    public String getNombre(){return nombre;}
     /**
      * Le da el color a las ficahs del jugador
      * @param color
@@ -62,13 +61,27 @@ public class Jugador implements Serializable {
 
     /**
      * Retorna las fichas del jugador que no han puesto en el tablero
-     * @return
+     * @return ficha
      */
     public Ficha getFichaNoEnTablero(){
         for (Ficha ficha:fichas){
             if(ficha.getX() == null && ficha.getY() == null){return ficha;}
         }
         return null;
+    }
+
+    /**
+     * Cuenta cuantas fichas no han sido eliminadas
+     * @return
+     */
+    public int contarFichasEnJuego(){
+        int contadorFichasEnJuego= 0;
+        for (Ficha ficha:fichas){
+            if(ficha.fichaEnJuego){
+                contadorFichasEnJuego++;
+            }
+        }
+        return contadorFichasEnJuego;
     }
 
 }

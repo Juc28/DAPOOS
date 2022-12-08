@@ -3,7 +3,11 @@ package dominio;
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
-
+/**
+ * Esta clase contiene las características del comodin Gun en el juego de Dapoos
+ * @author Erika Juliana Castro Romero y Mariana Pulido Moreno
+ * @version 5.0
+ */
 public class Gun extends Comodin implements Serializable {
 
     public Gun() {

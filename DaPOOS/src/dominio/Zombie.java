@@ -3,6 +3,11 @@ package dominio;
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
+/**
+ * Esta clase contiene las características de una ficha zombie que es un tipo especial en el juego de Dapoos
+ * @author Erika Juliana Castro Romero y Mariana Pulido Moreno
+ * @version 5.0
+ */
 
 public class Zombie extends Ficha implements Serializable {
     /**

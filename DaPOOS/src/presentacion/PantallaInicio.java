@@ -1,18 +1,15 @@
 package presentacion;
-
 import dominio.DamaPoos;
-import dominio.Ficha;
-import dominio.Jugador;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ *
+ */
 public class PantallaInicio extends JPanel {
     public static final String fondoI = "src/presentacion/imagenes/fondo1.png";
     public static final String fondoI2 = "src/presentacion/imagenes/fondo3.png";

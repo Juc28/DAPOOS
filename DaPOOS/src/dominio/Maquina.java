@@ -1,7 +1,7 @@
 package dominio;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+
 
 public class Maquina extends Jugador implements Serializable {
 

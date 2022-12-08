@@ -1,14 +1,17 @@
 package dominio;
-
-import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math;
-
 import static java.lang.Math.abs;
 
+/**
+ * Clase que ejecuta el juego DAMAPOOS, el cual consiste en el juego clasico de damas con otro adicionales que es mover
+ * fichas en diagonal en un tablero 10*10
+ * @author Erika Juliana Castro Romero y Mariana Pulido Moreno
+ * @version 5.0
+ */
 public class DamaPoos implements Serializable {
     private static DamaPoos juego = null;
     private Casilla[][] tablero;
@@ -21,11 +24,18 @@ public class DamaPoos implements Serializable {
     public boolean eliminarPorGun = false;
     private List<MiEventoEscuchador> eventoEscuchadors = new ArrayList<MiEventoEscuchador>();
 
+    /**
+     *
+     * @param eventoEscuchador
+     */
     public void addEventListener(MiEventoEscuchador eventoEscuchador) {
         this.eventoEscuchadors.add(eventoEscuchador);
     }
 
-
+    /**
+     * Asigna el juego
+     * @param juego
+     */
     public static void setJuego(DamaPoos juego) {
         DamaPoos.juego = juego;
     }
@@ -62,7 +72,7 @@ public class DamaPoos implements Serializable {
     }
 
     /**
-     *
+     * Asigna el turno que va tener el juego
      * @param turno
      */
     public void setTurno(Jugador turno){
@@ -137,14 +147,19 @@ public class DamaPoos implements Serializable {
             for (int j = 0; j < tablero[0].length; j++) {
                 if ((((i == 0)  || (i==2))&&(j % 2 != 0)) || (((i == 1)|| (i==3))&&(j % 2 == 0))){
                     Ficha ficha = jugadorNegro.getFichaNoEnTablero();
-                    tablero[i][j].setFicha(ficha);
-                    ficha.setX(i);
-                    ficha.setY(j);
+                    if (ficha != null){
+                        tablero[i][j].setFicha(ficha);
+                        ficha.setX(i);
+                        ficha.setY(j);
+                    }
+
                 }if ((((i == 8)  || (i==6))&&(j % 2 != 0)) || (((i == 7)|| (i==9))&&(j % 2 == 0))){
                     Ficha ficha = jugadorRojo.getFichaNoEnTablero();
-                    tablero[i][j].setFicha(ficha);
-                    ficha.setX(i);
-                    ficha.setY(j);
+                    if(ficha != null){
+                        tablero[i][j].setFicha(ficha);
+                        ficha.setX(i);
+                        ficha.setY(j);
+                    }
                 }
             }
         }
@@ -158,7 +173,6 @@ public class DamaPoos implements Serializable {
      * @return false cuando cumple uno de los momientos no aceptados
      */
     private boolean posiblesMovimientos(Jugador jugador,Casilla inicio,Casilla fin) {
-        //TODO: hacer un if para verificar si el juego acabo
         if(jugador.getColor() != inicio.getFicha().getColor()){return false;}
         if (fin.getColor().equalsIgnoreCase("Blanco")){return false;}
         if(inicio.getFicha() == null){return false;}
@@ -166,12 +180,10 @@ public class DamaPoos implements Serializable {
         if(abs(inicio.getX() - fin.getX()) != abs(inicio.getY() - fin.getY()) ){return false;}
         Ficha pieza = inicio.getFicha();
         if (pieza instanceof  Reina){
-
         }else{
             if(abs(inicio.getX() - fin.getX())>2){return false;}//No se puede mover mas de dos casillas
         }
         if(pieza instanceof Ninja || pieza instanceof  Reina){ //La fichas  no se puede mover de para atras
-            //System.out.println("Se pudo mover");
         }else{
             if (pieza.getColor().equalsIgnoreCase("Rojo") && fin.getX() > inicio.getX()) {return false;}
             if (pieza.getColor().equalsIgnoreCase("Negro") && fin.getX() < inicio.getX()) {return false;}
@@ -180,23 +192,48 @@ public class DamaPoos implements Serializable {
     }
 
     /**
-     * Elimina las fichas cuando una del otro jugador la mata
+     * Elimina las fichas cuando una paso por encima otra ficha
      * @param casilla
      */
-    public void eliminarFichas(Casilla casilla,Jugador jugador){
-
+    private void eliminarFichas(Casilla casilla,Jugador jugador){
         if(casilla.getFicha() != null){
+            Jugador enemigo = getJugadorByColor(casilla.getFicha().getColor());
             if(casilla.getFicha() instanceof Gun){
                 eventoEscuchadors.forEach((el) -> el.onComodinGun(jugador));
                 eliminarPorGun = true;
+                casilla.getFicha().fichaEnJuego = false;
                 casilla.setFicha(null);
-
             }
+            casilla.getFicha().fichaEnJuego = false;
             casilla.setFicha(null);
+            if(enemigo.contarFichasEnJuego() == 0){
+                Jugador jugadorGanador;
+                if(enemigo.getColor() == "Rojo") {
+                    jugadorGanador = getJugadorByColor("Negro");
+                }else {
+                    jugadorGanador = getJugadorByColor("Rojo");
+                }
+                eventoEscuchadors.forEach((el) -> el.onJuegoTerminado(jugadorGanador));
+            }
         }
 
     }
 
+    /**
+     * Elimina la ficha del contricante
+     * @param casilla
+     * @param jugador
+     * @return true si la elimino
+     */
+    public boolean removerFichaContricante(Casilla casilla,Jugador jugador){
+        if(casilla.getFicha() != null ){
+            if(!casilla.getFicha().getColor().equalsIgnoreCase(jugador.getColor())){
+                eliminarFichas(casilla,jugador);
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Mueve las fichas de un jugador correspodiente teniendo encuenta la ficha en la que estaba a la que va llegar
      * @param jugador
@@ -257,7 +294,6 @@ public class DamaPoos implements Serializable {
             fin.setFicha(inicio.getFicha());
             inicio.setFicha(null);
             cambioTurno();
-            eventoEscuchadors.forEach((el) -> el.onJuegoTerminado(jugador));
             retorno = (retorno == 0) ? 1 : retorno; // 1 significa que la ficha se movio
         }else {
             retorno = 0; // 0 significa que la ficha no se movio
@@ -276,13 +312,11 @@ public class DamaPoos implements Serializable {
             Ninja fichaNinja = new Ninja(casilla.getFicha().getColor(), casilla.getX(),casilla.getY());
             casilla.setFicha(fichaNinja);
             System.out.println(casilla.getFicha().getClass());
-        }
-        if(tipo == 1){
+        }if(tipo == 1){
             Reina fichaReina = new Reina(casilla.getFicha().getColor(), casilla.getX(),casilla.getY());
             casilla.setFicha(fichaReina);
             System.out.println(casilla.getFicha().getClass());
-        }
-        if(tipo == 2){
+        }if(tipo == 2){
             Zombie fichaZombie = new Zombie(casilla.getFicha().getColor(), casilla.getX(),casilla.getY());
             casilla.setFicha(fichaZombie);
             System.out.println(casilla.getFicha().getClass());
@@ -293,7 +327,6 @@ public class DamaPoos implements Serializable {
      * Saber cuando cambia el turno para
      */
     public void cambioTurno(){
-
         for (Jugador siguienteJugador : getJugadores()) {
             if (turno.getColor() != siguienteJugador.getColor()) {
                 turno = siguienteJugador;
@@ -305,8 +338,11 @@ public class DamaPoos implements Serializable {
 
     }
 
+    /**
+     * Se crean los comodines y se tiene encuenta que tipo de comodin se va crear en el tablero
+     */
     public void comodines(){
-        int seCreoComodines= getNumerosAleatorias(0,1);
+        int seCreoComodines=1;//getNumerosAleatorias(0,1);
         if (seCreoComodines == 1){
             int numeroAleatorioComodines = getNumerosAleatorias(1,3);
             switch (numeroAleatorioComodines){
@@ -320,6 +356,11 @@ public class DamaPoos implements Serializable {
             }
         }
     }
+
+    /**
+     * Se coloca el comodin en un posión aleatorio durante el juego para que los puedan obtener los jugadores
+     * @param comodin
+     */
     public void setComodinesAleatoria(Comodin comodin){
         boolean comodinPositivo = true;
         while (comodinPositivo) {
@@ -335,16 +376,6 @@ public class DamaPoos implements Serializable {
         }
     }
 
-    public boolean removerFicha(Casilla casilla,Jugador jugador){
-        if(casilla.getFicha() != null ){
-            if(!casilla.getFicha().getColor().equalsIgnoreCase(jugador.getColor())){
-                casilla.setFicha(null);
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Oculta las casillas especiales en el tablero
      */
@@ -358,4 +389,5 @@ public class DamaPoos implements Serializable {
             }
         }
     }
+
 }
