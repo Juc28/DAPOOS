@@ -18,8 +18,6 @@ public class Tablero extends JPanel {
         this.juego = juego;
         juego.setTablero();
         removeAll();
-        //prepararElementosTerminar();
-        //prepareElementosInformacion();
         crearTablero();
         juego.addEventListener(new MiEventoEscuchador() {
             @Override
@@ -74,7 +72,6 @@ public class Tablero extends JPanel {
                         BoardSquare casillaFutura = (BoardSquare)e.getSource();
                         if(casillaFutura.ficha == null){
                             if(casillaInicial != null){
-
                                 int moviento = juego.movimientoRequerido(juego.getTurno(),casillaInicial.casilla,casillaFutura.casilla);
                                 if(moviento == 2){
                                     int opciones = opcionesFichas();
@@ -128,10 +125,7 @@ public class Tablero extends JPanel {
         crearTablero();
     }
 
-    /**
-     *
-     * @return
-     */
+   
     public int opcionesFichas(){
         String[] botones = {"Ninja", "Reina", "Zombie"};
         int ventana = JOptionPane.showOptionDialog(null,
@@ -160,12 +154,7 @@ public class Tablero extends JPanel {
         add(turno);
     }
 
-    private void prepararElementosTerminar() {
-        terminar = new JButton("Terminar Juego");
-        terminar.setBounds(720, 400, 140, 40);
-        terminar.setIcon(new ImageIcon("src/presentacion/imagenes/terminar.png"));
-        add(terminar);
-    }
+
 
     public void guardar(DamaPoos juego,File file) throws IOException {
             String nombre = file.getAbsolutePath();
