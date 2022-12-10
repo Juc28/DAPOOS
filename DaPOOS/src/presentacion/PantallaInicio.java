@@ -97,8 +97,8 @@ public class PantallaInicio extends JPanel {
         radio4=new JRadioButton("No");
         radio4.setBounds(480,320,50,30);
         porc.setText("50");
-        forma.setSelectedIndex(2);
-        radio3.setSelected(true);
+        forma.setSelectedIndex(1);
+        //radio3.setSelected(true);
         add(radio4);
         repaint();
     }

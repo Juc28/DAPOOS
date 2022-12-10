@@ -160,7 +160,6 @@ public class DamaPoos implements Serializable {
                         ficha.setY(j);
                         ok = true;
                     }
-
                 }if ((((i == 8)  || (i==6))&&(j % 2 != 0)) || (((i == 7)|| (i==9))&&(j % 2 == 0))){
                     Ficha ficha = jugadorRojo.getFichaNoEnTablero();
                     if(ficha != null){
@@ -339,7 +338,7 @@ public class DamaPoos implements Serializable {
     }
 
     /**
-     * Saber cuando cambia el turno para
+     * Saber cuando cambia el turno para el otro jugador
      */
     public void cambioTurno(){
         for (Jugador siguienteJugador : getJugadores()) {

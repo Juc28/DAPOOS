@@ -238,8 +238,9 @@ public class DamasGUI extends JFrame {
                 Jugador[] jugadors = {jugador1,jugador2};
                 juego.setJugadores(jugadors);
                 prepareElementosTablero();
-                limpiarCasillasEspeciales();
-
+                if (juego.formaDeAparecen == 2){
+                    limpiarCasillasEspeciales();
+                }
             }
         });
 
