@@ -8,6 +8,7 @@ public interface MiEventoEscuchador extends Serializable{
     public void onJugarCambio(Jugador jugador);
 
     public void onComodinGun(Jugador jugador);
+    public void onCuentaRegresivaTurno(int cuentaRegresiva);
 
 
 }

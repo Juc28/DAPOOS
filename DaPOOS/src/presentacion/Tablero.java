@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import javax.swing.Timer;
 
 public class Tablero extends JPanel {
     protected JButton terminar;
@@ -37,6 +38,11 @@ public class Tablero extends JPanel {
                 System.out.println("Si funciono Gun");
                 jugadorEspecial = jugador;
                 //juego.setTurno(jugador);
+
+            }
+
+            @Override
+            public void onCuentaRegresivaTurno(int cuentaRegresiva) {
 
             }
         });
@@ -125,7 +131,6 @@ public class Tablero extends JPanel {
         crearTablero();
     }
 
-   
     public int opcionesFichas(){
         String[] botones = {"Ninja", "Reina", "Zombie"};
         int ventana = JOptionPane.showOptionDialog(null,
