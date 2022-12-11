@@ -122,10 +122,10 @@ public class PantallaInicio extends JPanel {
     public void areasDates() {
         removeAll();
         setFondo(PantallaInicio.fondoI4);
+        //TODO: Arreglar para cuando es jugador VS maquina
         empezar = new JButton("EMPEZAR JUEGO");
         empezar.setBounds(400,350,140,50);
         empezar.setIcon(new ImageIcon("src/presentacion/imagenes/empezar.png"));
-
         atras = new JButton("atras");
         atras.setBounds(5,10,80,20);
         add(atras);

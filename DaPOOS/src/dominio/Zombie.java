@@ -10,6 +10,8 @@ import java.io.Serializable;
  */
 
 public class Zombie extends Ficha implements Serializable {
+
+    public Integer turnoQueHanPasado = null;
     /**
      * Construtor de la clase Zombie
      * @param color

@@ -1,9 +1,15 @@
 package dominio;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.lang.Math;
+import java.util.ListIterator;
+import javax.swing.Timer;
+
 import static java.lang.Math.abs;
 
 /**
@@ -22,8 +28,14 @@ public class DamaPoos implements Serializable {
     public boolean permitirEspeciales;
     public int formaDeAparecen;
     public boolean eliminarPorGun = false;
+    public boolean permiteQuicktime;
+    private int tiempoDeTurno;
+    private Timer tiempo;
+    private int cuentaRegresiva;
+    public boolean maquina;
     private List<MiEventoEscuchador> eventoEscuchadors = new ArrayList<MiEventoEscuchador>();
     private static boolean ok;
+    private ArrayList<Zombie> zombieAparece = new ArrayList<Zombie>();
 
     /**
      *
@@ -41,6 +53,7 @@ public class DamaPoos implements Serializable {
         DamaPoos.juego = juego;
         ok = true;
     }
+    public void setTiempoDeTurno(int segundos){this.tiempoDeTurno = (segundos+1)*1000;}
 
     /**
      * Retorna un arreglo de los jugadores
@@ -126,6 +139,30 @@ public class DamaPoos implements Serializable {
         }
         ponerFichas();
         enProgreso = true;
+        if(permiteQuicktime){
+            cuentaRegresiva = tiempoDeTurno;
+            tiempoDeJuego();
+        }
+
+    }
+
+    private void tiempoDeJuego(){
+        tiempo = new javax.swing.Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //System.out.println("Es hora de cambiar el turno al siguiente jugador");
+                cuentaRegresiva -= 1000;
+                eventoEscuchadors.forEach((el) -> el.onCuentaRegresivaTurno(cuentaRegresiva));
+                if (cuentaRegresiva <= 0){
+                    cambioTurno();
+                    // La cuenta regresiva resetear en el metodo de cambio de turno
+
+                }
+                // juego.cambioTurno();
+            }
+        });
+        tiempo.setRepeats(true);
+        tiempo.start();
     }
 
     /**
@@ -190,7 +227,7 @@ public class DamaPoos implements Serializable {
         }else{
             if(abs(inicio.getX() - fin.getX())>2){return false;}//No se puede mover mas de dos casillas
         }
-        if(pieza instanceof Ninja || pieza instanceof  Reina){ //La fichas  no se puede mover de para atras
+        if(pieza instanceof Ninja || pieza instanceof  Reina || pieza instanceof Zombie ){ //La fichas  no se puede mover de para atras
         }else{
             if (pieza.getColor().equalsIgnoreCase("Rojo") && fin.getX() > inicio.getX()) {return false;}
             if (pieza.getColor().equalsIgnoreCase("Negro") && fin.getX() < inicio.getX()) {return false;}
@@ -204,18 +241,29 @@ public class DamaPoos implements Serializable {
      */
     public void eliminarFichas(Casilla casilla,Jugador jugador){
         if(casilla.getFicha() != null){
-            Jugador enemigo = getJugadorByColor(casilla.getFicha().getColor());
+            Jugador enemigo;
+            if(jugador.getColor() == "Rojo") {
+                enemigo = getJugadorByColor("Negro");
+                ok = true;
+            }else {
+                enemigo = getJugadorByColor("Rojo");
+                ok = true;
+            }
             ok = true;
             if(casilla.getFicha() instanceof Gun){
                 eventoEscuchadors.forEach((el) -> el.onComodinGun(jugador));
-                eliminarPorGun = true;
-                casilla.getFicha().fichaEnJuego = false;
-                casilla.setFicha(null);
+                eliminarPorGun = true; // Si el test no sirve pegar la 214 y 215
                 ok = true;
             }
-            casilla.getFicha().fichaEnJuego = false;
+            Ficha ficha = casilla.getFicha();
+            if(ficha instanceof Zombie){
+                Zombie soyZombie = (Zombie) ficha;
+                soyZombie.turnoQueHanPasado = 0;
+                zombieAparece.add(soyZombie);
+            }
+            ficha.fichaEnJuego = false;
             casilla.setFicha(null);
-            if(enemigo.contarFichasEnJuego() == 0){
+            if(enemigo != null && enemigo.contarFichasEnJuego() == 0){
                 Jugador jugadorGanador;
                 if(enemigo.getColor() == "Rojo") {
                     jugadorGanador = getJugadorByColor("Negro");
@@ -282,18 +330,25 @@ public class DamaPoos implements Serializable {
                 int yDelMedio = abs(y+est2);
                 //System.out.println(inicio.getX()+":"+inicio.getY()+" - "+fin.getX()+":"+fin.getY());
                 Casilla casillaDelMedio = getTablero()[xDelMedio][yDelMedio];
-                //System.out.println(casillaDelMedio.getX()+":"+casillaDelMedio.getY());
-                if(casillaDelMedio.getFicha() != null) {//Verifica si hay una ficha en la casilla y la elimina
-                    if(casillaDelMedio.getFicha() instanceof Ninja){ //Excepto si es Ninja cuando tiene una vida
-                        Ninja soyNinja = (Ninja) casillaDelMedio.getFicha();
+                Ficha fichaMedio = casillaDelMedio.getFicha();
+                if(fichaMedio != null) {//Verifica si hay una ficha en la casilla y la elimina
+                    if(fichaMedio instanceof Ninja){ //Excepto si es Ninja cuando tiene una vida
+                        Ninja soyNinja = (Ninja) fichaMedio;
                         if (soyNinja.getTieneVidas()){
                             soyNinja.removerVidas();
                         }else {
                             eliminarFichas(casillaDelMedio,jugador); // Elimina la ficha del juego
                         }
-                    }else {
-                        eliminarFichas(casillaDelMedio,jugador);
                     }
+                    else {
+                        if(!jugador.getColor().equalsIgnoreCase(fichaMedio.getColor())){
+                            eliminarFichas(casillaDelMedio,jugador);
+                        }else {
+                            return 0;
+                        }
+
+                    }
+
                 }
             }//Si la ficha es negra y esta en la ultima linea (primera linea del competidor)
             if(inicio.getFicha().getColor().equalsIgnoreCase("Negro")&& fin.getX() == 9){
@@ -303,6 +358,8 @@ public class DamaPoos implements Serializable {
                 retorno = 2; // 2 significa que la ficha esta en la ultima linea
             }
             fin.setFicha(inicio.getFicha());
+            fin.getFicha().setX(fin.getX()); // Le ubicacion actual de la ficha
+            fin.getFicha().setY(fin.getY());
             inicio.setFicha(null);
             cambioTurno();
             retorno = (retorno == 0) ? 1 : retorno; // 1 significa que la ficha se movio
@@ -341,17 +398,114 @@ public class DamaPoos implements Serializable {
      * Saber cuando cambia el turno para el otro jugador
      */
     public void cambioTurno(){
+        ListIterator<Zombie> zombieI = zombieAparece.listIterator();
+        while (zombieI.hasNext()){
+            Zombie zombie = zombieI.next();
+            if(zombie.turnoQueHanPasado >= 3){
+                Casilla casillaZombie = getTablero()[zombie.getX()][ zombie.getY()];
+                if(casillaZombie.getFicha() == null){
+                    casillaZombie.setFicha(zombie);
+                    zombieI.remove();
+                }
+            }
+            zombie.turnoQueHanPasado ++;
+        }
         for (Jugador siguienteJugador : getJugadores()) {
             if (turno.getColor() != siguienteJugador.getColor()) {
+                if(permiteQuicktime){ // Reseteado el timepo cuando cambia el turno del jugador
+                    cuentaRegresiva = tiempoDeTurno;
+                }
                 turno = siguienteJugador;
                 comodines();
                 eventoEscuchadors.forEach((el) -> el.onJugarCambio(turno));
+                if(maquina && siguienteJugador.getColor().equalsIgnoreCase("Rojo")){
+                    autoMovimiento();
+
+                }
                 return;
             }
         }
 
     }
+    private void fichaEspecialMaquina(Casilla casilla){
+        int numeroAletorio = getNumerosAleatorias(0,2);
+        fichaSeConvierteEnEspecial(casilla,numeroAletorio);
+    }
+    private void autoMovimiento(){
+        Jugador maquina = getJugadorByColor("Rojo");
+        for (Ficha ficha: maquina.getFichas()){
+            Ficha fichaTablero = getTablero()[ficha.getX()][ficha.getY()].getFicha();
+            if(fichaTablero != null && fichaTablero.fichaEnJuego){
+                Casilla posibleMovimiento1 = getTableroPorXyY((ficha.getX()-1),(ficha.getY()-1));
+                Casilla posibleMovimiento2 = getTableroPorXyY((ficha.getX()-1),(ficha.getY()+1));
+                Casilla posibleSalto1 = getTableroPorXyY((ficha.getX()-2),(ficha.getY()-2));
+                Casilla posibleSalto2 = getTableroPorXyY((ficha.getX()-2),(ficha.getY()+2));
+                Casilla posibleMovimiento3 = null;
+                Casilla posibleMovimiento4 = null;
+                Casilla posibleSalto3 = null;
+                Casilla posibleSalto4 = null;
+                if(fichaTablero instanceof Reina || fichaTablero instanceof Ninja || fichaTablero instanceof Zombie){
+                    posibleMovimiento3 = getTableroPorXyY(ficha.getX()+1,ficha.getY()-1);
+                    posibleMovimiento4 = getTableroPorXyY(ficha.getX()+1,ficha.getY()+1);
+                    posibleSalto3 = getTableroPorXyY(ficha.getX()+2,ficha.getY()-2);
+                    posibleSalto4 = getTableroPorXyY(ficha.getX()+2,ficha.getY()+2);
+                }
+                Casilla casillaLugarFicha = getTableroPorXyY(ficha.getX(),ficha.getY());
+                if(saltoSiEsPosible(maquina,posibleSalto1,posibleMovimiento1,casillaLugarFicha)){return;}
+                if(saltoSiEsPosible(maquina,posibleSalto2,posibleMovimiento2,casillaLugarFicha)){return;}
+                if(saltoSiEsPosible(maquina,posibleSalto3,posibleMovimiento3,casillaLugarFicha)){return;}
+                if(saltoSiEsPosible(maquina,posibleSalto4,posibleMovimiento4,casillaLugarFicha)){return;}
+            }
+        }
+        for (Ficha ficha: maquina.getFichas()){
+            if(ficha.fichaEnJuego){
+                Casilla posibleMovimiento1 = getTableroPorXyY((ficha.getX()-1),(ficha.getY()-1));
+                Casilla posibleMovimiento2 = getTableroPorXyY((ficha.getX()-1),(ficha.getY()+1));
+                Casilla posibleMovimiento3 = null;
+                Casilla posibleMovimiento4 = null;
+                Casilla casillaLugarFicha = getTableroPorXyY(ficha.getX(),ficha.getY());
+                if(ficha instanceof Reina || ficha instanceof Ninja || ficha instanceof Zombie){
+                    posibleMovimiento3 = getTableroPorXyY(ficha.getX()+1,ficha.getY()-1);
+                    posibleMovimiento4 = getTableroPorXyY(ficha.getX()+1,ficha.getY()+1);
+                }
+                if(movioSiEsPosible(maquina,posibleMovimiento1,casillaLugarFicha)){return;}
+                if(movioSiEsPosible(maquina,posibleMovimiento2,casillaLugarFicha)){return;}
+                if(movioSiEsPosible(maquina,posibleMovimiento3,casillaLugarFicha)){return;}
+                if(movioSiEsPosible(maquina,posibleMovimiento4,casillaLugarFicha)){return;}
+            }
+        }
 
+    }
+    public Casilla getTableroPorXyY(int x, int y){
+        if(x>9 || y >9 || x< 0 || y<0){
+            return null;
+        }
+        return tablero[x][y];
+    }
+    private boolean saltoSiEsPosible(Jugador maquina,Casilla posibleSalto,Casilla posibleMovimiento,Casilla casillaLugarFicha){
+        if(posibleSalto != null && posibleSalto.getFicha() == null && posibleMovimiento.getFicha() != null){
+            int movio = movimientoRequerido(maquina,casillaLugarFicha,posibleSalto);
+            if (movio > 0){
+                if(movio == 2){
+                    fichaEspecialMaquina(posibleMovimiento);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean movioSiEsPosible(Jugador maquina,Casilla posibleMovimiento,Casilla casillaLugarFicha){
+        if(posibleMovimiento != null && posibleMovimiento.getFicha() == null){
+            int movio = movimientoRequerido(maquina,casillaLugarFicha,posibleMovimiento);
+            if (movio > 0){
+                if(movio == 2){
+                    fichaEspecialMaquina(posibleMovimiento);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Se crean los comodines y se tiene encuenta que tipo de comodin se va crear en el tablero
      */
@@ -364,7 +518,7 @@ public class DamaPoos implements Serializable {
                     setComodinesAleatoria(new Gun());
                     ok = true;
                     break;
-                case 2: //
+                case 2:
                     break;
                 case 3:
                     break;

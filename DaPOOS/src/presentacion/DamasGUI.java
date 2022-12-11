@@ -23,6 +23,7 @@ public class DamasGUI extends JFrame {
     private DamaPoos juego = new DamaPoos();
 
 
+
     public void setTitulo(String titulo){
         this.setTitle(titulo);
     }
@@ -50,6 +51,11 @@ public class DamasGUI extends JFrame {
             @Override
             public void onComodinGun(Jugador jugador) {
 
+            }
+
+            @Override
+            public void onCuentaRegresivaTurno(int cuentaRegresiva) {
+                setTitulo("DAMAPOOS - " + juego.getTurno().getColor() + " ["+ cuentaRegresiva/1000 + "]");
             }
         });
     }
@@ -218,11 +224,25 @@ public class DamasGUI extends JFrame {
             }
         });
     }
+    private void prepareAccionesMaquina(){
+        inicio.maquina.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               juego.maquina = true;
+               inicio.areasDates();
+                prepareAccionTablero();
+
+            }
+        });
+    }
+
+
+
     private void prepareAccionModo(){
         inicio.continuar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 inicio.prepararElementosJugadores();
                 prepareAccionesJugadores();
+                prepareAccionesMaquina();
                 prepareAccionAtras2();
             }
         });
@@ -233,6 +253,10 @@ public class DamasGUI extends JFrame {
                 juego.permitirEspeciales = inicio.radio3.isSelected();
                 juego.porcentajeCasillasEspeciales = Integer.parseInt(inicio.porc.getText());
                 juego.formaDeAparecen = inicio.forma.getSelectedIndex();
+                juego.permiteQuicktime = inicio.radio2.isSelected();
+                if(inicio.tim != null && inicio.tim.getText().equalsIgnoreCase("")){
+                    juego.setTiempoDeTurno(Integer.parseInt(inicio.tim.getText()));
+                }
                 Jugador jugador1 = new Jugador(inicio.nombre1.getText(),inicio.Color1.getSelectedItem().toString());
                 Jugador jugador2 = new Jugador(inicio.nombre2.getText(),inicio.Color2.getSelectedItem().toString());
                 Jugador[] jugadors = {jugador1,jugador2};

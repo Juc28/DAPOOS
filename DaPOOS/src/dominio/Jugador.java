@@ -58,6 +58,7 @@ public class Jugador implements Serializable {
             fichas.add(ficha);
         }
     }
+    public ArrayList<Ficha> getFichas(){return fichas;}
 
     /**
      * Retorna las fichas del jugador que no han puesto en el tablero
