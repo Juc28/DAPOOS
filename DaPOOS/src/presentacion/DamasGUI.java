@@ -38,7 +38,7 @@ public class DamasGUI extends JFrame {
         juego.addEventListener(new MiEventoEscuchador() {
             @Override
             public void onJuegoTerminado(Jugador jugador) {
-                //TODO:Agregar ventana
+                JOptionPane.showMessageDialog(null, "El ganoado es:"+jugador.getNombre(), "Se acabo el juego ", -1);
                 //JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
                 //System.out.println("Juego Terminado"+jugador.getColor());
             }
@@ -54,6 +54,17 @@ public class DamasGUI extends JFrame {
             }
 
             @Override
+            public void onComodinStomp(Jugador juegodor, Casilla casillaFin) {
+
+            }
+
+            @Override
+            public void onComodinOneMoreTime(Jugador jugador) {
+
+            }
+
+
+            @Override
             public void onCuentaRegresivaTurno(int cuentaRegresiva) {
                 setTitulo("DAMAPOOS - " + juego.getTurno().getColor() + " ["+ cuentaRegresiva/1000 + "]");
             }
@@ -63,7 +74,6 @@ public class DamasGUI extends JFrame {
 
 
     private void prepareElementos() {
-
         setTitle("DaPOOS");
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         setResizable(false);
@@ -72,8 +82,6 @@ public class DamasGUI extends JFrame {
         fileChooser = new JFileChooser();
         fileChooser.setVisible(false);
         prepareElementosIncio();
-
-
     }
 
     private void prepareActions() {
@@ -113,21 +121,13 @@ public class DamasGUI extends JFrame {
                 accionSaveFile();
             }
         });
-//        terminar.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                setSize(new Dimension(900, 590));
-//                inicio.prepareElemtosIn();
-//                prepareActions();
-//            }
-//        });
+
 
     }
 
     private void accionOpenFile() throws IOException {
         fileChooser = new JFileChooser("C:");
         fileChooser.setVisible(true);
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter("DamaPoos (.ser)", ".ser");
-//        fileChooser.addChoosableFileFilter(filter);
         int seleccion = fileChooser.showOpenDialog(open);
         File file = null;
         if (seleccion == JFileChooser.APPROVE_OPTION) {
@@ -159,8 +159,6 @@ public class DamasGUI extends JFrame {
 
     private void accionSaveFile() {
         fileChooser.setVisible(true);
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter("DamaPoos (.ser)", ".ser");
-//        fileChooser.setFileFilter(filter);
         int seleccion = fileChooser.showSaveDialog(save);
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
@@ -254,8 +252,13 @@ public class DamasGUI extends JFrame {
                 juego.porcentajeCasillasEspeciales = Integer.parseInt(inicio.porc.getText());
                 juego.formaDeAparecen = inicio.forma.getSelectedIndex();
                 juego.permiteQuicktime = inicio.radio2.isSelected();
-                if(inicio.tim != null && inicio.tim.getText().equalsIgnoreCase("")){
-                    juego.setTiempoDeTurno(Integer.parseInt(inicio.tim.getText()));
+                if(juego.permiteQuicktime && inicio.tim != null && !inicio.tim.getText().equalsIgnoreCase(" ")){
+                    try{
+                        juego.setTiempoDeTurno(Integer.parseInt(inicio.tim.getText()));
+                    }catch (Exception ex){
+                        juego.setTiempoDeTurno(20); //Tiempo establecido al usuario y es posible agregar una ventana de error
+                    }
+
                 }
                 Jugador jugador1 = new Jugador(inicio.nombre1.getText(),inicio.Color1.getSelectedItem().toString());
                 Jugador jugador2 = new Jugador(inicio.nombre2.getText(),inicio.Color2.getSelectedItem().toString());

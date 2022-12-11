@@ -12,6 +12,7 @@ public class Tablero extends JPanel {
     private JButton[][] boton;
     private DamaPoos juego;
     public Jugador jugadorEspecial = null; //Que jugador gano el comodin
+    public Casilla casilla;
 
 
     public Tablero(CardLayout layout,DamaPoos juego) {
@@ -23,7 +24,6 @@ public class Tablero extends JPanel {
         juego.addEventListener(new MiEventoEscuchador() {
             @Override
             public void onJuegoTerminado(Jugador jugador) {
-                //TODO:Agregar ventana
                 JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
                 //System.out.println("Juego Terminado"+jugador.getColor());
             }
@@ -35,10 +35,19 @@ public class Tablero extends JPanel {
 
             @Override
             public void onComodinGun(Jugador jugador) {
-                System.out.println("Si funciono Gun");
+//                System.out.println("Si funciono Gun");
                 jugadorEspecial = jugador;
-                //juego.setTurno(jugador);
+            }
 
+            @Override
+            public void onComodinStomp(Jugador jugador,Casilla casillaFin) {
+                jugadorEspecial = jugador;
+                casilla = casillaFin;
+            }
+
+            @Override
+            public void onComodinOneMoreTime(Jugador jugador) {
+                jugadorEspecial = jugador;
             }
 
             @Override
@@ -108,6 +117,8 @@ public class Tablero extends JPanel {
                 }else {
                     if (casilla instanceof Mine){
                         boardSquare.setBackground(Color.ORANGE);
+                    }else if(casilla instanceof Jail){
+                        boardSquare.setBackground(Color.BLUE);
                     }else {
                         boardSquare.setBackground(Color.WHITE);
                     }

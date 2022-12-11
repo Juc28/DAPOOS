@@ -1,5 +1,6 @@
 package dominio;
 
+import javax.swing.*;
 import java.io.Serializable;
 /**
  * Esta clase contiene las características de los elementos que hay en el juego de Dapoos
@@ -10,7 +11,6 @@ public class Elemento implements Serializable {
     private String color;
     private Integer x;
     private Integer y;
-    private String imagen;
 
     /**
      * Constructor de la clase Elemento
@@ -77,6 +77,7 @@ public class Elemento implements Serializable {
     public void setY(Integer y) {
         this.y = y;
     }
+
 
 
 
