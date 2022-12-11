@@ -23,7 +23,7 @@ public class PantallaInicio extends JPanel {
     public JTextField nombre1, nombre2,tim,porc;
 
     public JRadioButton radio1,radio2,radio3,radio4;
-    private ButtonGroup bg;
+    private ButtonGroup bgDificultad,bgCasillas;
     private DamaPoos juego;
     public PantallaInicio(String imagen, DamaPoos juego){
         super(null);
@@ -65,15 +65,16 @@ public class PantallaInicio extends JPanel {
         titulo1.setForeground(Color.WHITE);
         titulo1.setBounds(245,220,150,30);
         add(titulo1);
-        bg=new ButtonGroup();
+        bgDificultad =new ButtonGroup();
+        bgCasillas =new ButtonGroup();
         radio1=new JRadioButton("Normal");
         radio1.setBounds(235,270,100,30);
         add(radio1);
-        bg.add(radio1);
+        bgDificultad.add(radio1);
         radio2=new JRadioButton("Quicktime");
         radio2.setBounds(235,320,100,30);
         add(radio2);
-        bg.add(radio2);
+        bgDificultad.add(radio2);
         tim = new JTextField("tiempo de turno");
         tim.setBounds(340,320,100,30);
         add(tim);
@@ -84,7 +85,7 @@ public class PantallaInicio extends JPanel {
         radio3=new JRadioButton("Si");
         radio3.setBounds(480,270,40,30);
         add(radio3);
-        bg.add(radio3);
+        bgCasillas.add(radio3);
         porc = new JTextField("porcentaje de casillas");
         porc.setBounds(530,270,120,30);
         add(porc);
@@ -96,10 +97,11 @@ public class PantallaInicio extends JPanel {
         add(forma);
         radio4=new JRadioButton("No");
         radio4.setBounds(480,320,50,30);
+        add(radio4);
+        bgCasillas.add(radio4);
         porc.setText("50");
         forma.setSelectedIndex(1);
         //radio3.setSelected(true);
-        add(radio4);
         repaint();
     }
     public void prepararElementosJugadores(){
@@ -160,7 +162,6 @@ public class PantallaInicio extends JPanel {
         nombre2.setText("Jugador 2");
         Color1.setSelectedIndex(1);
         Color2.setSelectedIndex(2);
-
         repaint();
     }
 

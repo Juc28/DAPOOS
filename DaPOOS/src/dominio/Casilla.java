@@ -33,5 +33,6 @@ public class Casilla extends Elemento implements Serializable {
      * Retorna la ficha que esta en la casilla
      * @return
      */
+
     public Ficha getFicha(){return ficha;}
 }

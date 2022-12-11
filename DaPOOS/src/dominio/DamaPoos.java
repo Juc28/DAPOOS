@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.lang.Math;
 import java.util.ListIterator;
@@ -28,6 +27,7 @@ public class DamaPoos implements Serializable {
     public boolean permitirEspeciales;
     public int formaDeAparecen;
     public boolean eliminarPorGun = false;
+    public boolean eliminadoPorStomp = false;
     public boolean permiteQuicktime;
     private int tiempoDeTurno;
     private Timer tiempo;
@@ -36,6 +36,7 @@ public class DamaPoos implements Serializable {
     private List<MiEventoEscuchador> eventoEscuchadors = new ArrayList<MiEventoEscuchador>();
     private static boolean ok;
     private ArrayList<Zombie> zombieAparece = new ArrayList<Zombie>();
+    private final ArrayList<Jail> jailEntra = new ArrayList<Jail>();
 
     /**
      *
@@ -129,10 +130,16 @@ public class DamaPoos implements Serializable {
             while (casillasAleatorio > 0){
                 int xAleatorio = getNumerosAleatorias(0,9);
                 int yAleatorio = getNumerosAleatorias(0,9);
-                Casilla casillaMine = tablero[xAleatorio][yAleatorio];
-                if(!casillaMine.getColor().equalsIgnoreCase("Blanco")){
-                    Mine mine = new Mine(xAleatorio,yAleatorio);
-                    tablero[xAleatorio][yAleatorio] = mine;
+                Casilla casillaEspecial = tablero[xAleatorio][yAleatorio];
+                if(!casillaEspecial.getColor().equalsIgnoreCase("Blanco")){
+                    int escogerTipo = getNumerosAleatorias(1,100);
+                    Especial especial;
+                    if(escogerTipo > 50 ){
+                        especial = new Mine(xAleatorio,yAleatorio);
+                    }else {
+                        especial = new Jail(xAleatorio,yAleatorio);
+                    }
+                    tablero[xAleatorio][yAleatorio] = especial;
                     casillasAleatorio--;
                 }
             }
@@ -146,19 +153,19 @@ public class DamaPoos implements Serializable {
 
     }
 
+    /**
+     * El tiempo de turno de cada jugador cuando elige QuickTime
+     */
     private void tiempoDeJuego(){
         tiempo = new javax.swing.Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println("Es hora de cambiar el turno al siguiente jugador");
                 cuentaRegresiva -= 1000;
                 eventoEscuchadors.forEach((el) -> el.onCuentaRegresivaTurno(cuentaRegresiva));
                 if (cuentaRegresiva <= 0){
                     cambioTurno();
                     // La cuenta regresiva resetear en el metodo de cambio de turno
-
                 }
-                // juego.cambioTurno();
             }
         });
         tiempo.setRepeats(true);
@@ -166,7 +173,7 @@ public class DamaPoos implements Serializable {
     }
 
     /**
-     *
+     * Retorna un numero entre el min y el max que se le de
      * @param min
      * @param max
      * @return
@@ -217,10 +224,10 @@ public class DamaPoos implements Serializable {
      * @return false cuando cumple uno de los momientos no aceptados
      */
     public boolean posiblesMovimientos(Jugador jugador,Casilla inicio,Casilla fin) {
-        if(jugador.getColor() != inicio.getFicha().getColor()){return false;}
-        if (fin.getColor().equalsIgnoreCase("Blanco")){return false;}
         if(inicio.getFicha() == null){return false;}
         if(fin.getFicha() != null){return false;}
+        if(jugador.getColor() != inicio.getFicha().getColor()){return false;}
+        if (fin.getColor().equalsIgnoreCase("Blanco")){return false;}
         if(abs(inicio.getX() - fin.getX()) != abs(inicio.getY() - fin.getY()) ){return false;}
         Ficha pieza = inicio.getFicha();
         if (pieza instanceof  Reina){
@@ -249,11 +256,18 @@ public class DamaPoos implements Serializable {
                 enemigo = getJugadorByColor("Rojo");
                 ok = true;
             }
-            ok = true;
             if(casilla.getFicha() instanceof Gun){
                 eventoEscuchadors.forEach((el) -> el.onComodinGun(jugador));
-                eliminarPorGun = true; // Si el test no sirve pegar la 214 y 215
+                eliminarPorGun = true;
                 ok = true;
+            }
+            if (casilla.getFicha() instanceof OneMoreTime){
+                //eventoEscuchadors.forEach((el) -> el.onComodinOneMoreTime(jugador));
+                cuentaRegresiva += tiempoDeTurno;
+            }
+            if(casilla.getFicha() instanceof Stomp){
+                eventoEscuchadors.forEach((el) -> el.onComodinStomp(jugador,casilla));
+                eliminadoPorStomp = true;
             }
             Ficha ficha = casilla.getFicha();
             if(ficha instanceof Zombie){
@@ -328,7 +342,6 @@ public class DamaPoos implements Serializable {
                 int y = inicio.getY();
                 int xDelMedio = abs(x+es2);
                 int yDelMedio = abs(y+est2);
-                //System.out.println(inicio.getX()+":"+inicio.getY()+" - "+fin.getX()+":"+fin.getY());
                 Casilla casillaDelMedio = getTablero()[xDelMedio][yDelMedio];
                 Ficha fichaMedio = casillaDelMedio.getFicha();
                 if(fichaMedio != null) {//Verifica si hay una ficha en la casilla y la elimina
@@ -340,15 +353,14 @@ public class DamaPoos implements Serializable {
                             eliminarFichas(casillaDelMedio,jugador); // Elimina la ficha del juego
                         }
                     }
+
                     else {
                         if(!jugador.getColor().equalsIgnoreCase(fichaMedio.getColor())){
                             eliminarFichas(casillaDelMedio,jugador);
                         }else {
                             return 0;
                         }
-
                     }
-
                 }
             }//Si la ficha es negra y esta en la ultima linea (primera linea del competidor)
             if(inicio.getFicha().getColor().equalsIgnoreCase("Negro")&& fin.getX() == 9){
@@ -375,7 +387,7 @@ public class DamaPoos implements Serializable {
      * @param tipo
      */
     public void fichaSeConvierteEnEspecial(Casilla casilla,int tipo){
-        Image imagen;// 0 es Ninja, 1 es Reina y 2 Zombie
+         // 0 es Ninja, 1 es Reina y 2 Zombie
         if(tipo == 0){
             Ninja fichaNinja = new Ninja(casilla.getFicha().getColor(), casilla.getX(),casilla.getY());
             casilla.setFicha(fichaNinja);
@@ -398,6 +410,26 @@ public class DamaPoos implements Serializable {
      * Saber cuando cambia el turno para el otro jugador
      */
     public void cambioTurno(){
+        esZombie();
+        estaEnJail();
+
+        for (Jugador siguienteJugador : getJugadores()) {
+            if (turno.getColor() != siguienteJugador.getColor()) {
+                if(permiteQuicktime){ // Reseteado el timepo cuando cambia el turno del jugador
+                    cuentaRegresiva = tiempoDeTurno;
+                }
+                turno = siguienteJugador;
+                comodines();
+                eventoEscuchadors.forEach((el) -> el.onJugarCambio(turno));
+                if(maquina && siguienteJugador.getColor().equalsIgnoreCase("Rojo")){
+                    autoMovimiento();
+
+                }return;
+            }
+        }
+    }
+
+    private void esZombie(){
         ListIterator<Zombie> zombieI = zombieAparece.listIterator();
         while (zombieI.hasNext()){
             Zombie zombie = zombieI.next();
@@ -410,27 +442,44 @@ public class DamaPoos implements Serializable {
             }
             zombie.turnoQueHanPasado ++;
         }
-        for (Jugador siguienteJugador : getJugadores()) {
-            if (turno.getColor() != siguienteJugador.getColor()) {
-                if(permiteQuicktime){ // Reseteado el timepo cuando cambia el turno del jugador
-                    cuentaRegresiva = tiempoDeTurno;
-                }
-                turno = siguienteJugador;
-                comodines();
-                eventoEscuchadors.forEach((el) -> el.onJugarCambio(turno));
-                if(maquina && siguienteJugador.getColor().equalsIgnoreCase("Rojo")){
-                    autoMovimiento();
+    }
+    private void estaEnJail(){
 
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero[0].length; j++) {
+                if(tablero[i][j] instanceof Jail){
+                    Jail jail = (Jail) tablero[i][j];
+                    if(jail.getFicha() != null) {
+                        jail.setCuentaTurnosParaSalirCarcel(jail.getCuentaTurnosParaSalirCarcel() - 1);
+                    }
                 }
-                return;
             }
         }
+//        ListIterator<Jail> jailI = jailEntra.listIterator();
+//        while (jailI.hasNext()){
+//            Jail jail = jailI.next();
+//            if(jail.getCuentaTurnosParaSalirCarcel() <= 0){
+//                Casilla casilla = getTablero()[jail.getX()][ jail.getY()];
+//                if(casilla.getFicha() == null){
+//
+//                    jailI.remove();
+//                }
+//            }
 
+//        }
     }
+    /**
+     * Que eliga alzar una ficha especial cuando en el modo Maquina VS Jugador la maquina llegue a la ultima linea
+     * @param casilla
+     */
     private void fichaEspecialMaquina(Casilla casilla){
         int numeroAletorio = getNumerosAleatorias(0,2);
         fichaSeConvierteEnEspecial(casilla,numeroAletorio);
     }
+
+    /**
+     * Lo movimiento que hace la maquina cuando se elige el modo Maquina VS Jugador
+     */
     private void autoMovimiento(){
         Jugador maquina = getJugadorByColor("Rojo");
         for (Ficha ficha: maquina.getFichas()){
@@ -474,53 +523,75 @@ public class DamaPoos implements Serializable {
                 if(movioSiEsPosible(maquina,posibleMovimiento4,casillaLugarFicha)){return;}
             }
         }
-
     }
+
+    /**
+     * Retorna la posion X y Y del talero para el modo Maquina VS Jugador la maquina puede
+     * @param x
+     * @param y
+     * @return
+     */
     public Casilla getTableroPorXyY(int x, int y){
         if(x>9 || y >9 || x< 0 || y<0){
             return null;
-        }
-        return tablero[x][y];
+        }return tablero[x][y];
     }
+
+    /**
+     * Si en el modo Maquina VS Jugador la maquina puede matar una ficha
+     * @param maquina
+     * @param posibleSalto
+     * @param posibleMovimiento
+     * @param casillaLugarFicha
+     * @return
+     */
     private boolean saltoSiEsPosible(Jugador maquina,Casilla posibleSalto,Casilla posibleMovimiento,Casilla casillaLugarFicha){
         if(posibleSalto != null && posibleSalto.getFicha() == null && posibleMovimiento.getFicha() != null){
             int movio = movimientoRequerido(maquina,casillaLugarFicha,posibleSalto);
             if (movio > 0){
                 if(movio == 2){
                     fichaEspecialMaquina(posibleMovimiento);
-                }
-                return true;
+                }return true;
             }
-        }
-        return false;
+        }return false;
     }
+
+    /**
+     * Si en el modo Maquina VS Jugador la maquina puede mover
+     * @param maquina
+     * @param posibleMovimiento
+     * @param casillaLugarFicha
+     * @return
+     */
     private boolean movioSiEsPosible(Jugador maquina,Casilla posibleMovimiento,Casilla casillaLugarFicha){
         if(posibleMovimiento != null && posibleMovimiento.getFicha() == null){
             int movio = movimientoRequerido(maquina,casillaLugarFicha,posibleMovimiento);
             if (movio > 0){
                 if(movio == 2){
                     fichaEspecialMaquina(posibleMovimiento);
-                }
-                return true;
+                }return true;
             }
-        }
-        return false;
+        }return false;
     }
     /**
      * Se crean los comodines y se tiene encuenta que tipo de comodin se va crear en el tablero
      */
     public void comodines(){
-        int seCreoComodines=1;//getNumerosAleatorias(0,1);
+        int seCreoComodines= getNumerosAleatorias(0,2);
         if (seCreoComodines == 1){
-            int numeroAleatorioComodines = getNumerosAleatorias(1,3);
+            int numeroAleatorioComodines = getNumerosAleatorias(1,4);
             switch (numeroAleatorioComodines){
                 case 1: // Hace refencia al comodin gun
                     setComodinesAleatoria(new Gun());
                     ok = true;
                     break;
-                case 2:
+                case 2: //Hace referencia al comodin one more time
+                    if (permiteQuicktime){
+                        setComodinesAleatoria(new OneMoreTime());
+                    }
                     break;
-                case 3:
+                case 3: //Hace referencia el comodin stomp
+                    setComodinesAleatoria(new Stomp());
                     break;
             }
         }
@@ -560,6 +631,11 @@ public class DamaPoos implements Serializable {
             }
         }
     }
+
+    /**
+     *
+     * @return
+     */
     public boolean ok(){
         return ok;
     }
