@@ -5,33 +5,45 @@ import java.awt.*;
 import java.io.Serializable;
 
 public class Jail extends Especial implements Serializable {
+    private int cuentaTurnosParaSalirCarcel;
+    private ImageIcon imagenAntesDeCarcel;
+    /**
+     * Constructo de la clase Jail
+     * @param x
+     * @param y
+     */
     public Jail( int x, int y) {
         super("BLUE", x, y);
     }
-    private int cuentaTurnosParaSalirCarcel;
-    private ImageIcon imagenAntesDeCarcel;
 
 
+    /**
+     * Le da los turnos para contar lo que faltan para salir de la casilla jail
+     * @param cuentaTurnosParaSalirCarcel
+     */
     public void setCuentaTurnosParaSalirCarcel(int cuentaTurnosParaSalirCarcel){
 
-        if(cuentaTurnosParaSalirCarcel >= 2){
-            this.cuentaTurnosParaSalirCarcel = 2;
-            setFichaEnCarcel(getFicha());
+        this.cuentaTurnosParaSalirCarcel = cuentaTurnosParaSalirCarcel;
+        setFichaEnCarcel(getFicha());
 
-        }else {
-            this.cuentaTurnosParaSalirCarcel = cuentaTurnosParaSalirCarcel;
-            setFichaEnCarcel(getFicha());
-        }
     }
 
+    /**
+     * Retorna los turnos que le faltan para poder moverse de la casilla jail
+     * @return
+     */
     public int getCuentaTurnosParaSalirCarcel(){
         return cuentaTurnosParaSalirCarcel;
     }
 
+    /**
+     * Cambia la imagen de la ficha cuando esta en una casilla de tipo jail para saber cuanto le falta para salir y que se distinga
+     * @param ficha
+     */
     private void setFichaEnCarcel(Ficha ficha){
         if(ficha != null) {
             Image imagen;
-            if (cuentaTurnosParaSalirCarcel == 2) {
+            if (cuentaTurnosParaSalirCarcel >= 2) {
                 if (getFicha().getColor().equalsIgnoreCase("Rojo")) {
                     imagen = new ImageIcon(getClass().getResource("../presentacion/imagenes/fichaCarcel2R.gif")).getImage();
                 } else {
@@ -67,6 +79,9 @@ public class Jail extends Especial implements Serializable {
         }
     }
 
+    /**
+     * Quita la ficha de la carcel depues de cumplir los 2 turnos
+     */
     private void removerDeLaCarcel(){
         if(getFicha() != null){
             getFicha().setIcon(imagenAntesDeCarcel);

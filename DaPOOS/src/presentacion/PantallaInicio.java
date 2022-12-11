@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *
+ * Representa la pantalla inicial, donde se selecciona toda la configuración del juego
+ * @author Erika Juliana Castro Romero y Mariana Pulido Moreno
+ * @version 5.0
  */
 public class PantallaInicio extends JPanel {
     public static final String fondoI = "src/presentacion/imagenes/fondo1.png";
@@ -124,7 +126,6 @@ public class PantallaInicio extends JPanel {
     public void areasDates() {
         removeAll();
         setFondo(PantallaInicio.fondoI4);
-        //TODO: Arreglar para cuando es jugador VS maquina
         empezar = new JButton("EMPEZAR JUEGO");
         empezar.setBounds(400,350,140,50);
         empezar.setIcon(new ImageIcon("src/presentacion/imagenes/empezar.png"));
@@ -164,8 +165,6 @@ public class PantallaInicio extends JPanel {
         Color2.setSelectedIndex(2);
         repaint();
     }
-
-
 
 
     public void paintComponent(Graphics g) {

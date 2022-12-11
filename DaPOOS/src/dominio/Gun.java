@@ -9,7 +9,9 @@ import java.io.Serializable;
  * @version 5.0
  */
 public class Gun extends Comodin implements Serializable {
-
+    /**
+     * Constructo de la clase Gun
+     */
     public Gun() {
         Image imagen;
         imagen = new ImageIcon(getClass().getResource("../presentacion/imagenes/gun.gif")).getImage();

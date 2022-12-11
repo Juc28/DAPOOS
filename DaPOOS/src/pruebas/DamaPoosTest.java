@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-
 public class DamaPoosTest {
    @Test
    public void deberiaAsignarUnDamaPoos(){
@@ -130,7 +129,6 @@ public class DamaPoosTest {
         Ficha ficha = new Ficha("Negro",1,0);
         Casilla inicio = new Casilla("Negro",1,0);
         inicio.setFicha(ficha);
-        Casilla fin = new Casilla("Negro",2,1);
         juego.setJugadores(jugadores);
         juego.setTablero();
         juego.ponerFichas();
@@ -147,7 +145,6 @@ public class DamaPoosTest {
         Ficha ficha = new Ficha("Negro",1,0);
         Casilla inicio = new Casilla("Negro",1,0);
         inicio.setFicha(ficha);
-        Casilla fin = new Casilla("Negro",2,1);
         juego.setJugadores(jugadores);
         juego.setTablero();
         juego.ponerFichas();
@@ -155,6 +152,7 @@ public class DamaPoosTest {
         assertTrue(juego.ok());
 
     }
+
     @Test
     public void deberiaPoderFichasEspecialesZombie(){
         DamaPoos juego = new DamaPoos();
@@ -164,7 +162,6 @@ public class DamaPoosTest {
         Ficha ficha = new Ficha("Negro",1,0);
         Casilla inicio = new Casilla("Negro",1,0);
         inicio.setFicha(ficha);
-        Casilla fin = new Casilla("Negro",2,1);
         juego.setJugadores(jugadores);
         juego.setTablero();
         juego.ponerFichas();
@@ -181,7 +178,6 @@ public class DamaPoosTest {
         Ficha ficha = new Ficha("Negro",1,0);
         Casilla inicio = new Casilla("Negro",1,0);
         inicio.setFicha(ficha);
-        Casilla fin = new Casilla("Negro",2,1);
         juego.setJugadores(jugadores);
         juego.setTablero();
         juego.ponerFichas();
@@ -198,7 +194,6 @@ public class DamaPoosTest {
         Ficha ficha = new Ficha("Negro",1,0);
         Casilla inicio = new Casilla("Negro",1,0);
         inicio.setFicha(ficha);
-        Casilla fin = new Casilla("Negro",2,1);
         Comodin comodin = new Comodin();
         juego.setJugadores(jugadores);
         juego.setTablero();
@@ -217,8 +212,6 @@ public class DamaPoosTest {
         Ficha ficha = new Ficha("Negro",1,0);
         Casilla inicio = new Casilla("Negro",1,0);
         inicio.setFicha(ficha);
-        Casilla fin = new Casilla("Negro",2,1);
-        Comodin comodin = new Comodin();
         juego.setJugadores(jugadores);
         juego.setTablero();
         juego.ponerFichas();
