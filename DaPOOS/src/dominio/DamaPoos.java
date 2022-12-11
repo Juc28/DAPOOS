@@ -36,12 +36,9 @@ public class DamaPoos implements Serializable {
     private List<MiEventoEscuchador> eventoEscuchadors = new ArrayList<MiEventoEscuchador>();
     private static boolean ok;
     private ArrayList<Zombie> zombieAparece = new ArrayList<Zombie>();
-    private final ArrayList<Jail> jailEntra = new ArrayList<Jail>();
 
-    /**
-     *
-     * @param eventoEscuchador
-     */
+
+
     public void addEventListener(MiEventoEscuchador eventoEscuchador) {
         this.eventoEscuchadors.add(eventoEscuchador);
     }
@@ -54,6 +51,11 @@ public class DamaPoos implements Serializable {
         DamaPoos.juego = juego;
         ok = true;
     }
+
+    /**
+     * Asiga el tiempo del turno teniendo en cuenta que este en modo de juego Quicktime
+     * @param segundos
+     */
     public void setTiempoDeTurno(int segundos){this.tiempoDeTurno = (segundos+1)*1000;}
 
     /**
@@ -239,6 +241,12 @@ public class DamaPoos implements Serializable {
             if (pieza.getColor().equalsIgnoreCase("Rojo") && fin.getX() > inicio.getX()) {return false;}
             if (pieza.getColor().equalsIgnoreCase("Negro") && fin.getX() < inicio.getX()) {return false;}
         }
+        if(inicio instanceof Jail){
+            Jail jail = (Jail) inicio;
+            if(inicio.getFicha() != null && ((Jail) inicio).getCuentaTurnosParaSalirCarcel() > 0){
+                return false;
+            }
+        }
         return true;
     }
 
@@ -264,16 +272,14 @@ public class DamaPoos implements Serializable {
             if (casilla.getFicha() instanceof OneMoreTime){
                 //eventoEscuchadors.forEach((el) -> el.onComodinOneMoreTime(jugador));
                 cuentaRegresiva += tiempoDeTurno;
-            }
-            if(casilla.getFicha() instanceof Stomp){
-                eventoEscuchadors.forEach((el) -> el.onComodinStomp(jugador,casilla));
-                eliminadoPorStomp = true;
+                ok = true;
             }
             Ficha ficha = casilla.getFicha();
             if(ficha instanceof Zombie){
                 Zombie soyZombie = (Zombie) ficha;
                 soyZombie.turnoQueHanPasado = 0;
                 zombieAparece.add(soyZombie);
+                ok = true;
             }
             ficha.fichaEnJuego = false;
             casilla.setFicha(null);
@@ -352,9 +358,7 @@ public class DamaPoos implements Serializable {
                         }else {
                             eliminarFichas(casillaDelMedio,jugador); // Elimina la ficha del juego
                         }
-                    }
-
-                    else {
+                    } else {
                         if(!jugador.getColor().equalsIgnoreCase(fichaMedio.getColor())){
                             eliminarFichas(casillaDelMedio,jugador);
                         }else {
@@ -370,6 +374,9 @@ public class DamaPoos implements Serializable {
                 retorno = 2; // 2 significa que la ficha esta en la ultima linea
             }
             fin.setFicha(inicio.getFicha());
+            if(fin instanceof Jail){
+                ((Jail)fin).setCuentaTurnosParaSalirCarcel(3);
+            }
             fin.getFicha().setX(fin.getX()); // Le ubicacion actual de la ficha
             fin.getFicha().setY(fin.getY());
             inicio.setFicha(null);
@@ -412,23 +419,27 @@ public class DamaPoos implements Serializable {
     public void cambioTurno(){
         esZombie();
         estaEnJail();
-
         for (Jugador siguienteJugador : getJugadores()) {
             if (turno.getColor() != siguienteJugador.getColor()) {
                 if(permiteQuicktime){ // Reseteado el timepo cuando cambia el turno del jugador
                     cuentaRegresiva = tiempoDeTurno;
+                    ok = true;
                 }
                 turno = siguienteJugador;
                 comodines();
                 eventoEscuchadors.forEach((el) -> el.onJugarCambio(turno));
                 if(maquina && siguienteJugador.getColor().equalsIgnoreCase("Rojo")){
                     autoMovimiento();
+                    ok = true;
 
                 }return;
             }
         }
     }
 
+    /**
+     * Verifica si la ficha que con la que se va jugar es de tipo Zombie
+     */
     private void esZombie(){
         ListIterator<Zombie> zombieI = zombieAparece.listIterator();
         while (zombieI.hasNext()){
@@ -443,6 +454,10 @@ public class DamaPoos implements Serializable {
             zombie.turnoQueHanPasado ++;
         }
     }
+
+    /**
+     * Verifica que la ficha esta en un casilla tipo Jail
+     */
     private void estaEnJail(){
 
         for (int i = 0; i < tablero.length; i++) {
@@ -455,18 +470,7 @@ public class DamaPoos implements Serializable {
                 }
             }
         }
-//        ListIterator<Jail> jailI = jailEntra.listIterator();
-//        while (jailI.hasNext()){
-//            Jail jail = jailI.next();
-//            if(jail.getCuentaTurnosParaSalirCarcel() <= 0){
-//                Casilla casilla = getTablero()[jail.getX()][ jail.getY()];
-//                if(casilla.getFicha() == null){
-//
-//                    jailI.remove();
-//                }
-//            }
 
-//        }
     }
     /**
      * Que eliga alzar una ficha especial cuando en el modo Maquina VS Jugador la maquina llegue a la ultima linea
@@ -591,7 +595,7 @@ public class DamaPoos implements Serializable {
                     }
                     break;
                 case 3: //Hace referencia el comodin stomp
-                    setComodinesAleatoria(new Stomp());
+                    // setComodinesAleatoria(new Stomp());
                     break;
             }
         }
@@ -633,7 +637,7 @@ public class DamaPoos implements Serializable {
     }
 
     /**
-     *
+     * Verica las clases que no retornan nada y retorna un boolenado para ver si se cumplio lo de esas clases
      * @return
      */
     public boolean ok(){

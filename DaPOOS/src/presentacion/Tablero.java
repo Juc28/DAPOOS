@@ -5,8 +5,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import javax.swing.Timer;
-
+/**
+ * Representa el tablero grafico donde se va jugar con las configuraciones dadas
+ * @author Erika Juliana Castro Romero y Mariana Pulido Moreno
+ * @version 3.0
+ */
 public class Tablero extends JPanel {
     protected JButton terminar;
     private JButton[][] boton;
@@ -14,6 +17,11 @@ public class Tablero extends JPanel {
     public Jugador jugadorEspecial = null; //Que jugador gano el comodin
     public Casilla casilla;
 
+    /**
+     * Constructor de la clase Tablero
+     * @param layout
+     * @param juego
+     */
 
     public Tablero(CardLayout layout,DamaPoos juego) {
         super(layout);
@@ -24,7 +32,7 @@ public class Tablero extends JPanel {
         juego.addEventListener(new MiEventoEscuchador() {
             @Override
             public void onJuegoTerminado(Jugador jugador) {
-                JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
+                //JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
                 //System.out.println("Juego Terminado"+jugador.getColor());
             }
             @Override
@@ -40,17 +48,6 @@ public class Tablero extends JPanel {
             }
 
             @Override
-            public void onComodinStomp(Jugador jugador,Casilla casillaFin) {
-                jugadorEspecial = jugador;
-                casilla = casillaFin;
-            }
-
-            @Override
-            public void onComodinOneMoreTime(Jugador jugador) {
-                jugadorEspecial = jugador;
-            }
-
-            @Override
             public void onCuentaRegresivaTurno(int cuentaRegresiva) {
 
             }
@@ -58,6 +55,10 @@ public class Tablero extends JPanel {
     }
 
     BoardSquare casillaInicial;
+
+    /**
+     * Crea la interfaz de las casillas
+     */
     public class BoardSquare extends JButton{
         public Casilla casilla;
         public int x;
@@ -65,6 +66,10 @@ public class Tablero extends JPanel {
         public Ficha ficha;
         public Color emptyColor;
     }
+
+    /**
+     * Crea lo visible del tablero apartir de la clase DamaPoos
+     */
     private void crearTablero() {
         JPanel juegoPanel = new JPanel(new GridLayout(10, 10));
         boton = new BoardSquare[10][10];
@@ -135,6 +140,9 @@ public class Tablero extends JPanel {
         repaint();
     }
 
+    /**
+     * Actualiza el tablero para que muestre lo que esta pasado y borre lo anterior
+     */
     public void actulizarTablero(){
         removeAll();
         revalidate();
@@ -142,6 +150,11 @@ public class Tablero extends JPanel {
         crearTablero();
     }
 
+    /**
+     * Sirve para que cuando el jugador llegue a la primera fila del otro jugador pueda elegir la ficha especial en la que se
+     * quiere convertir
+     * @return
+     */
     public int opcionesFichas(){
         String[] botones = {"Ninja", "Reina", "Zombie"};
         int ventana = JOptionPane.showOptionDialog(null,
@@ -155,23 +168,14 @@ public class Tablero extends JPanel {
         else if(ventana == 2) {System.out.println("Zombie");}
         return ventana;
     }
-    void prepareElementosInformacion() {
-        JLabel c = new JLabel("Información del juego actual");
-        c.setBounds(720, 5, 220, 20);
-        add(c);
-        JLabel inf1 = new JLabel("Jugador 1");
-        inf1.setBounds(720, 30, 220, 20);
-        add(inf1);
-        JLabel inf2 = new JLabel("Jugador 2");
-        inf2.setBounds(720, 125, 220, 20);
-        add(inf2);
-        JLabel turno = new JLabel("TURNO");
-        turno.setBounds(720, 220, 220, 20);
-        add(turno);
-    }
 
 
-
+    /**
+     * Para que guarde el juego
+     * @param juego
+     * @param file
+     * @throws IOException
+     */
     public void guardar(DamaPoos juego,File file) throws IOException {
             String nombre = file.getAbsolutePath();
         if(!nombre.endsWith(".ser") ) {

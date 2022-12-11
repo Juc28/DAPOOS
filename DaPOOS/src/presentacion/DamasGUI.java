@@ -9,7 +9,11 @@ import java.io.*;
 import dominio.*;
 import javax.swing.Timer;
 
-
+/**
+ * Representa la interfa grafica del usuario
+ * @author Erika Juliana Castro Romero y Mariana Pulido Moreno
+ * @version 3.0
+ */
 public class DamasGUI extends JFrame {
     private PantallaInicio inicio;
     private Tablero tablero;
@@ -38,14 +42,19 @@ public class DamasGUI extends JFrame {
         juego.addEventListener(new MiEventoEscuchador() {
             @Override
             public void onJuegoTerminado(Jugador jugador) {
-                JOptionPane.showMessageDialog(null, "El ganoado es:"+jugador.getNombre(), "Se acabo el juego ", -1);
+                int confirm = JOptionPane.showConfirmDialog(null, "El ganador es: "+jugador.getNombre() + "El color del jugador es: " + jugador.getColor(), "Se acabo el juego ",-1);
+                if (JOptionPane.OK_OPTION == confirm) {
+                    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    System.exit(0);
+                }
+
                 //JOptionPane.showMessageDialog(null,"Gano el Jugador:"+jugador.getNombre());
                 //System.out.println("Juego Terminado"+jugador.getColor());
             }
             @Override
             public void onJugarCambio(Jugador jugador){
                 //JOptionPane.showMessageDialog(null,"Turno de:"+jugador.getColor());
-                setTitulo("DAMAPOOS - " + jugador.getColor());
+                setTitulo("DAMAPOOS - " + jugador.getColor() + " Fichas restantes: " + jugador.contarFichasEnJuego());
             }
 
             @Override
@@ -53,20 +62,10 @@ public class DamasGUI extends JFrame {
 
             }
 
-            @Override
-            public void onComodinStomp(Jugador juegodor, Casilla casillaFin) {
-
-            }
-
-            @Override
-            public void onComodinOneMoreTime(Jugador jugador) {
-
-            }
-
 
             @Override
             public void onCuentaRegresivaTurno(int cuentaRegresiva) {
-                setTitulo("DAMAPOOS - " + juego.getTurno().getColor() + " ["+ cuentaRegresiva/1000 + "]");
+                setTitulo("DAMAPOOS - " + juego.getTurno().getColor() + " ["+ cuentaRegresiva/1000 + "] " +"  "+ " Fichas restantes: " + juego.getTurno().contarFichasEnJuego());
             }
         });
     }
@@ -227,7 +226,7 @@ public class DamasGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                juego.maquina = true;
                inicio.areasDates();
-                prepareAccionTablero();
+               prepareAccionTablero();
 
             }
         });
