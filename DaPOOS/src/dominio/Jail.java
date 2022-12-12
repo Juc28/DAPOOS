@@ -9,8 +9,8 @@ public class Jail extends Especial implements Serializable {
     private ImageIcon imagenAntesDeCarcel;
     /**
      * Constructo de la clase Jail
-     * @param x
-     * @param y
+     * @param x la posicion x de la casilla jail
+     * @param y la posicion y de la casilla jail
      */
     public Jail( int x, int y) {
         super("BLUE", x, y);
@@ -19,7 +19,7 @@ public class Jail extends Especial implements Serializable {
 
     /**
      * Le da los turnos para contar lo que faltan para salir de la casilla jail
-     * @param cuentaTurnosParaSalirCarcel
+     * @param cuentaTurnosParaSalirCarcel los turnos que han pasado desde que esta una ficha en esta casilla jair
      */
     public void setCuentaTurnosParaSalirCarcel(int cuentaTurnosParaSalirCarcel){
 
@@ -30,7 +30,7 @@ public class Jail extends Especial implements Serializable {
 
     /**
      * Retorna los turnos que le faltan para poder moverse de la casilla jail
-     * @return
+     * @return los turnos que han pasado desde que esta una ficha en esta casilla jair
      */
     public int getCuentaTurnosParaSalirCarcel(){
         return cuentaTurnosParaSalirCarcel;
@@ -38,7 +38,7 @@ public class Jail extends Especial implements Serializable {
 
     /**
      * Cambia la imagen de la ficha cuando esta en una casilla de tipo jail para saber cuanto le falta para salir y que se distinga
-     * @param ficha
+     * @param ficha la ficha que esta en una casilla jair
      */
     private void setFichaEnCarcel(Ficha ficha){
         if(ficha != null) {

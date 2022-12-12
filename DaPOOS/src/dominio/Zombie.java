@@ -14,9 +14,9 @@ public class Zombie extends Ficha implements Serializable {
     public Integer turnoQueHanPasado = null;
     /**
      * Construtor de la clase Zombie
-     * @param color
-     * @param x
-     * @param y
+     * @param color que va tener la ficha zombie
+     * @param x la posicion x de la ficha zombie
+     * @param y la posicion y de la ficha reina
      */
     public Zombie(String color,int x, int y) {
         super(color,x, y);

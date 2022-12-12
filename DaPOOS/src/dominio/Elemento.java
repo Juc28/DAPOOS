@@ -32,7 +32,7 @@ public class Elemento implements Serializable {
 
     /**
      * Retorna el color del elemento
-     * @return color
+     * @return color que va tener el elemento
      */
     public String getColor() {
         return color;
@@ -40,7 +40,7 @@ public class Elemento implements Serializable {
 
     /**
      * Asigna el color del elemento
-     * @param color
+     * @param color que va tener el elemento
      */
     public void setColor(String color) {
         this.color = color;
@@ -48,7 +48,7 @@ public class Elemento implements Serializable {
 
     /**
      * Retorna la posición x
-     * @return x
+     * @return x la posicion x del elemento
      */
     public Integer getX() {
         return x;
@@ -56,7 +56,7 @@ public class Elemento implements Serializable {
 
     /**
      * Asigna la posición x
-     * @param x
+     * @param x la posicion x del elemento
      */
     public void setX(Integer x) {
         this.x = x;
@@ -64,7 +64,7 @@ public class Elemento implements Serializable {
 
     /**
      * Retorna la posición y
-     * @return y
+     * @return y la posicion y del elemento
      */
     public Integer getY() {
         return y;
@@ -72,7 +72,7 @@ public class Elemento implements Serializable {
 
     /**
      * Asigna la posición y
-     * @param y
+     * @param y la posicion y del elemento
      */
     public void setY(Integer y) {
         this.y = y;

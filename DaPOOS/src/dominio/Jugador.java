@@ -16,8 +16,8 @@ public class Jugador implements Serializable {
 
     /**
      * Constructor de la case jugador
-     * @param nombre
-     * @param color
+     * @param nombre que tiene el jugador
+     * @param color que tienen las fichas del jugador
      */
     public Jugador(String nombre, String color) {
         this.nombre = nombre;
@@ -26,19 +26,24 @@ public class Jugador implements Serializable {
 
     /**
      * Retorna el color de las fichas que tiene el jugador
-     * @return color
+     * @return color que tienen las fichas del jugador
      */
     public String getColor(){return color;}
+
+    /**
+     * Retorna el nombre del jugador
+     * @return nombre que tiene el jugador
+     */
     public String getNombre(){return nombre;}
     /**
      * Le da el color a las ficahs del jugador
-     * @param color
+     * @param color que tienen las fichas del jugador
      */
     public void setColor(String color){this.color = color;}
 
     /**
      * Le da las fichas a cada jugador depentiendo el color que escoja el jugador
-     * @param color
+     * @param color que tienen las fichas del jugador
      */
     public void setFichas(String color) {
         fichas = new ArrayList<Ficha>();
@@ -58,11 +63,16 @@ public class Jugador implements Serializable {
             fichas.add(ficha);
         }
     }
+
+    /**
+     * Retornas las fichas que tiene el jugador
+     * @return El arreglo de fichas que tiene los jugadores
+     */
     public ArrayList<Ficha> getFichas(){return fichas;}
 
     /**
      * Retorna las fichas del jugador que no han puesto en el tablero
-     * @return ficha
+     * @return ficha que no se ha colocado en el tablero
      */
     public Ficha getFichaNoEnTablero(){
         for (Ficha ficha:fichas){
@@ -73,7 +83,7 @@ public class Jugador implements Serializable {
 
     /**
      * Cuenta cuantas fichas no han sido eliminadas
-     * @return
+     * @return las fichas que aun no han sido eliminadas
      */
     public int contarFichasEnJuego(){
         int contadorFichasEnJuego= 0;
