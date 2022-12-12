@@ -11,9 +11,9 @@ import java.io.Serializable;
 public class Reina extends Ficha implements Serializable {
     /**
      * Constructor de la clase Reina
-     * @param color
-     * @param x
-     * @param y
+     * @param color que va tener la ficha reina
+     * @param x la posicion x de la ficha reina
+     * @param y la posicion y de la ficha reina
      */
     public Reina(String color, int x, int y) {
         super(color, x, y);

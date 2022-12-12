@@ -26,12 +26,17 @@ public class DamasGUI extends JFrame {
 
     private DamaPoos juego = new DamaPoos();
 
-
-
+    /**
+     * Da el titulo que va tener la ventana
+     * @param titulo
+     */
     public void setTitulo(String titulo){
         this.setTitle(titulo);
     }
 
+    /**
+     * Constructor de la clase DamasGUI
+     */
     public DamasGUI() {
         super("DamaPoos");
         prepareElementos();
@@ -42,7 +47,7 @@ public class DamasGUI extends JFrame {
         juego.addEventListener(new MiEventoEscuchador() {
             @Override
             public void onJuegoTerminado(Jugador jugador) {
-                int confirm = JOptionPane.showConfirmDialog(null, "El ganador es: "+jugador.getNombre() + "El color del jugador es: " + jugador.getColor(), "Se acabo el juego ",-1);
+                int confirm = JOptionPane.showConfirmDialog(null, "El ganador es: "+jugador.getNombre() , "Se acabo el juego ",-1);
                 if (JOptionPane.OK_OPTION == confirm) {
                     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     System.exit(0);
@@ -71,10 +76,11 @@ public class DamasGUI extends JFrame {
     }
 
 
-
+    /**
+     * Prepara la venta para mostarse
+     */
     private void prepareElementos() {
         setTitle("DaPOOS");
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         setResizable(false);
         setSize(900,540);
         prepareElementsMenu();
@@ -83,6 +89,9 @@ public class DamasGUI extends JFrame {
         prepareElementosIncio();
     }
 
+    /**
+     * Pera las acciones para emepezar el juego
+     */
     private void prepareActions() {
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent ev) {
@@ -100,6 +109,9 @@ public class DamasGUI extends JFrame {
 
     }
 
+    /**
+     * Prepara las acciones para eleguir las cosas del menu como guardar, abrir y sali
+     */
     private void prepareActionsMenu() {
         exit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
@@ -124,6 +136,10 @@ public class DamasGUI extends JFrame {
 
     }
 
+    /**
+     * Accion para abir archivos que tienen guadardo el juego
+     * @throws IOException
+     */
     private void accionOpenFile() throws IOException {
         fileChooser = new JFileChooser("C:");
         fileChooser.setVisible(true);
@@ -156,6 +172,10 @@ public class DamasGUI extends JFrame {
         prepareElementosTablero();
     }
 
+    /**
+     * Accion para guardar el juego como un archivo
+     */
+
     private void accionSaveFile() {
         fileChooser.setVisible(true);
         int seleccion = fileChooser.showSaveDialog(save);
@@ -169,6 +189,9 @@ public class DamasGUI extends JFrame {
         }
     }
 
+    /**
+     * Para salirse del juego
+     */
     private void setDefaultCloseOperation() {
         int confirm = JOptionPane.showConfirmDialog(exit, "Are you sure you want to exit?");
         if (JOptionPane.OK_OPTION == confirm) {
@@ -177,6 +200,9 @@ public class DamasGUI extends JFrame {
         }
     }
 
+    /**
+     * Prepara los elementos que va tener el menu
+     */
     private void prepareElementsMenu() {
         menu = new JMenuBar();
         setJMenuBar(menu);
@@ -192,7 +218,9 @@ public class DamasGUI extends JFrame {
         file.add(terminar);
     }
 
-
+    /**
+     * Prepara y llama los elementos de la clase pantalla de inicio
+     */
     public void prepareElementosIncio(){
         layout = new CardLayout();
         setSize(new Dimension(900, 540));
@@ -203,6 +231,9 @@ public class DamasGUI extends JFrame {
         add(pantalla);
     }
 
+    /**
+     * Prepara y llama los elementos de la clase tablero
+     */
     public void prepareElementosTablero(){
         setSize(900,540);
         tablero = new Tablero(layout,juego);
@@ -212,6 +243,10 @@ public class DamasGUI extends JFrame {
         getContentPane().add(tablero);
 
     }
+
+    /**
+     * Prepara las acciones para mostrar la pantalla depues de darle click al boton Jugador VS Jugador
+     */
     private void prepareAccionesJugadores(){
         inicio.jugadores.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -221,6 +256,10 @@ public class DamasGUI extends JFrame {
             }
         });
     }
+
+    /**
+     * Prepara las acciones para mostrar la pantalla depues de darle click al boton Jugador VS Maquina
+     */
     private void prepareAccionesMaquina(){
         inicio.maquina.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -233,7 +272,9 @@ public class DamasGUI extends JFrame {
     }
 
 
-
+    /**
+     * Prepara las acciones para mostrar la pantalla depues de darle click al boton continuar
+     */
     private void prepareAccionModo(){
         inicio.continuar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -244,6 +285,11 @@ public class DamasGUI extends JFrame {
             }
         });
     }
+
+    /**
+     * Prepara las acciones para mostrar el tablero depues de darle click al boton emepzar donde realmente se llaman los
+     * elementos y la informacion para jugar
+     */
     private void prepareAccionTablero(){
         inicio.empezar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -272,6 +318,9 @@ public class DamasGUI extends JFrame {
 
     }
 
+    /**
+     * Cuando se le da que las casillas se vean de forma relampago se muetsre por un momento
+     */
     private void limpiarCasillasEspeciales(){
         Timer timer = new Timer(3000, new ActionListener() {
             @Override
@@ -283,6 +332,10 @@ public class DamasGUI extends JFrame {
         timer.setRepeats(false); // Only execute once
         timer.start(); // Go go go!
     }
+
+    /**
+     * Muestra la pantalla anterior
+     */
     private void prepareAccionAtras1(){
         inicio.atras.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -292,6 +345,10 @@ public class DamasGUI extends JFrame {
             }
         });
     }
+
+    /**
+     * Muestra la pantalla anterior
+     */
     private void prepareAccionAtras2(){
         inicio.atras.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -301,6 +358,10 @@ public class DamasGUI extends JFrame {
             }
         });
     }
+
+    /**
+     * Muestra la pantalla anterior
+     */
     private void prepareAccionAtras3(){
         inicio.atras.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -310,6 +371,7 @@ public class DamasGUI extends JFrame {
             }
         });
     }
+
 
     public static void main(String[] args) {
         DamasGUI gui = new DamasGUI();

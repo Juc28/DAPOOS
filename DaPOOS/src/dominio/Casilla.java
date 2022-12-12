@@ -12,9 +12,9 @@ public class Casilla extends Elemento implements Serializable {
 
     /**
      * Constructor de la clase Casilla
-     * @param color
-     * @param x
-     * @param y
+     * @param color que va tener la casilla
+     * @param x posicion x de esta
+     * @param y posicion y de esta
      */
     public Casilla(String color, int x, int y) {
         super(color,x, y);
@@ -23,7 +23,7 @@ public class Casilla extends Elemento implements Serializable {
 
     /**
      * Coloca la ficha en un casilla
-     * @param ficha
+     * @param ficha la ficha que se va colocar en la casilla
      */
     public void setFicha(Ficha ficha){
         this.ficha = ficha;
@@ -31,7 +31,7 @@ public class Casilla extends Elemento implements Serializable {
 
     /**
      * Retorna la ficha que esta en la casilla
-     * @return
+     * @return la ficha que tiene en la casilla
      */
 
     public Ficha getFicha(){return ficha;}

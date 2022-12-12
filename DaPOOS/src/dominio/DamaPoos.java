@@ -45,7 +45,7 @@ public class DamaPoos implements Serializable {
 
     /**
      * Asigna el juego
-     * @param juego
+     * @param juego el juego que se crea
      */
     public static void setJuego(DamaPoos juego) {
         DamaPoos.juego = juego;
@@ -54,20 +54,20 @@ public class DamaPoos implements Serializable {
 
     /**
      * Asiga el tiempo del turno teniendo en cuenta que este en modo de juego Quicktime
-     * @param segundos
+     * @param segundos los segundos de cada turno
      */
     public void setTiempoDeTurno(int segundos){this.tiempoDeTurno = (segundos+1)*1000;}
 
     /**
      * Retorna un arreglo de los jugadores
-     * @return Jugador[] jugadores
+     * @return Jugador[] Arreglo de los jugadores dados
      */
     public Jugador[] getJugadores() {return jugadores;}
 
     /**
      * Retorna un jugador dependiento del color de la ficha de este
      * @param color correspondiente al Jugador
-     * @return jugador
+     * @return jugador el jugador que tiene ese color
      */
     public Jugador getJugadorByColor(String color){
         for(Jugador jugador:jugadores){
@@ -79,7 +79,7 @@ public class DamaPoos implements Serializable {
 
     /**
      * Asigna el arreglo de jugadores
-     * @param jugadores
+     * @param jugadores el arreglo de jugadores
      */
     public void setJugadores(Jugador[] jugadores) {
         this.jugadores = jugadores;
@@ -94,7 +94,7 @@ public class DamaPoos implements Serializable {
 
     /**
      * Asigna el turno que va tener el juego
-     * @param turno
+     * @param turno el jugador que tiene le turno
      */
     public void setTurno(Jugador turno){
         this.turno = turno;
@@ -104,7 +104,7 @@ public class DamaPoos implements Serializable {
 
     /**
      * Retorna el turno al jugador correspodiente
-     * @return turno
+     * @return turno da el jugador que tiene el turno
      */
     public Jugador getTurno(){return turno;}
 
@@ -158,7 +158,7 @@ public class DamaPoos implements Serializable {
     /**
      * El tiempo de turno de cada jugador cuando elige QuickTime
      */
-    private void tiempoDeJuego(){
+    public void tiempoDeJuego(){
         tiempo = new javax.swing.Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -176,15 +176,15 @@ public class DamaPoos implements Serializable {
 
     /**
      * Retorna un numero entre el min y el max que se le de
-     * @param min
-     * @param max
-     * @return
+     * @param min el valor minimo que va se puede elejir
+     * @param max el valor maximo que va se puede elejir
+     * @return el valor que se eligio de min a max
      */
     public int getNumerosAleatorias(int min, int max) { return (int) ((Math.random() * (max - min)) + min); }
 
     /**
      * Retorna el tablero del juego
-     * @return tablero
+     * @return tablero el tablero del juego
      */
     public Casilla[][] getTablero(){
         return tablero;
@@ -220,9 +220,9 @@ public class DamaPoos implements Serializable {
 
     /**
      * Se contepla que movimiento no pueden hacer la fichas es el tablero
-     * @param jugador - el que este en el turno correspodiente
-     * @param inicio - la casillas actual
-     * @param fin - la casilla en la que va quedar
+     * @param jugador  el que este en el turno correspodiente
+     * @param inicio  la casillas actual
+     * @param fin  la casilla en la que va quedar
      * @return false cuando cumple uno de los momientos no aceptados
      */
     public boolean posiblesMovimientos(Jugador jugador,Casilla inicio,Casilla fin) {
@@ -252,7 +252,8 @@ public class DamaPoos implements Serializable {
 
     /**
      * Elimina las fichas cuando una paso por encima otra ficha
-     * @param casilla
+     * @param casilla casilla donde esta la ficha que se va eliminar
+     * @param jugador el jugador que va eliminar la ficha
      */
     public void eliminarFichas(Casilla casilla,Jugador jugador){
         if(casilla.getFicha() != null){
@@ -300,8 +301,8 @@ public class DamaPoos implements Serializable {
 
     /**
      * Elimina la ficha del contricante
-     * @param casilla
-     * @param jugador
+     * @param casilla casilla donde esta la ficha que se va eliminar
+     * @param jugador el jugador que va eliminar la ficha
      * @return true si la elimino
      */
     public boolean removerFichaContricante(Casilla casilla,Jugador jugador){
@@ -315,9 +316,9 @@ public class DamaPoos implements Serializable {
     }
     /**
      * Mueve las fichas de un jugador correspodiente teniendo encuenta la ficha en la que estaba a la que va llegar
-     * @param jugador
-     * @param inicio
-     * @param fin
+     * @param jugador el jugador que tiene el turno
+     * @param inicio la casilla de donde etsa la ficha
+     * @param fin la casilla a donde va llegar
      * @return un numero para saber en que parte queda la ficha
      */
     public int movimientoRequerido(Jugador jugador,Casilla inicio,Casilla fin){
@@ -390,8 +391,8 @@ public class DamaPoos implements Serializable {
 
     /**
      * Para saber cuando una ficha es diferente a las fichas normales
-     * @param casilla
-     * @param tipo
+     * @param casilla donde esta ubicada la ficha especial
+     * @param tipo para escoger que tipo de ficha especial quiere el jugador
      */
     public void fichaSeConvierteEnEspecial(Casilla casilla,int tipo){
          // 0 es Ninja, 1 es Reina y 2 Zombie
@@ -474,7 +475,7 @@ public class DamaPoos implements Serializable {
     }
     /**
      * Que eliga alzar una ficha especial cuando en el modo Maquina VS Jugador la maquina llegue a la ultima linea
-     * @param casilla
+     * @param casilla donde esta ubicada la ficha especial
      */
     private void fichaEspecialMaquina(Casilla casilla){
         int numeroAletorio = getNumerosAleatorias(0,2);
@@ -484,7 +485,7 @@ public class DamaPoos implements Serializable {
     /**
      * Lo movimiento que hace la maquina cuando se elige el modo Maquina VS Jugador
      */
-    private void autoMovimiento(){
+    public void autoMovimiento(){
         Jugador maquina = getJugadorByColor("Rojo");
         for (Ficha ficha: maquina.getFichas()){
             Ficha fichaTablero = getTablero()[ficha.getX()][ficha.getY()].getFicha();
@@ -531,8 +532,8 @@ public class DamaPoos implements Serializable {
 
     /**
      * Retorna la posion X y Y del talero para el modo Maquina VS Jugador la maquina puede
-     * @param x
-     * @param y
+     * @param x la posicion en x
+     * @param y la posicion en y
      * @return
      */
     public Casilla getTableroPorXyY(int x, int y){
@@ -543,10 +544,10 @@ public class DamaPoos implements Serializable {
 
     /**
      * Si en el modo Maquina VS Jugador la maquina puede matar una ficha
-     * @param maquina
-     * @param posibleSalto
-     * @param posibleMovimiento
-     * @param casillaLugarFicha
+     * @param maquina que el jugador sea maquina
+     * @param posibleSalto saltos que puede dar el jugador maquina si hay una ficha que pueda matar del otro jugador
+     * @param posibleMovimiento movimientos que puede dar el jugador maquina
+     * @param casillaLugarFicha en donde va quedar la ficha del jugador maquina
      * @return
      */
     private boolean saltoSiEsPosible(Jugador maquina,Casilla posibleSalto,Casilla posibleMovimiento,Casilla casillaLugarFicha){
@@ -562,9 +563,9 @@ public class DamaPoos implements Serializable {
 
     /**
      * Si en el modo Maquina VS Jugador la maquina puede mover
-     * @param maquina
-     * @param posibleMovimiento
-     * @param casillaLugarFicha
+     * @param maquina que el jugador sea maquina
+     * @param posibleMovimiento movimientos que puede dar el jugador maquina
+     * @param casillaLugarFicha en donde va quedar la ficha del jugador maquina
      * @return
      */
     private boolean movioSiEsPosible(Jugador maquina,Casilla posibleMovimiento,Casilla casillaLugarFicha){
@@ -603,7 +604,7 @@ public class DamaPoos implements Serializable {
 
     /**
      * Se coloca el comodin en un posión aleatorio durante el juego para que los puedan obtener los jugadores
-     * @param comodin
+     * @param comodin el tipo de comodin que se va a colocar
      */
     public void setComodinesAleatoria(Comodin comodin){
         boolean comodinPositivo = true;

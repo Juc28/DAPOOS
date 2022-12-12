@@ -27,6 +27,12 @@ public class PantallaInicio extends JPanel {
     public JRadioButton radio1,radio2,radio3,radio4;
     private ButtonGroup bgDificultad,bgCasillas;
     private DamaPoos juego;
+
+    /**
+     * Constructor de la clase pantallaInicio
+     * @param imagen que va tener la pantalla
+     * @param juego nuevo que va haber
+     */
     public PantallaInicio(String imagen, DamaPoos juego){
         super(null);
         this.juego = juego;
@@ -35,6 +41,10 @@ public class PantallaInicio extends JPanel {
 
     }
 
+    /**
+     * Dar el fondo que va tener la pantalla
+     * @param root
+     */
 
     private void setFondo(String root) {
         try {
@@ -44,6 +54,9 @@ public class PantallaInicio extends JPanel {
         }
     }
 
+    /**
+     * Los elementos para la primera pantalla que tiene un boton de jugar
+     */
     public void prepareElemtosIn(){
         removeAll();
         setFondo(PantallaInicio.fondoI);
@@ -53,6 +66,10 @@ public class PantallaInicio extends JPanel {
         add(n);
         repaint();
     }
+
+    /**
+     * los elementos para escoguer elementos del juego
+     */
     public void prepararElementosModo(){
         removeAll();
         setFondo(PantallaInicio.fondoI);
@@ -106,6 +123,10 @@ public class PantallaInicio extends JPanel {
         //radio3.setSelected(true);
         repaint();
     }
+
+    /**
+     * los elementos para escogue como se va jugar si Jugador VS Jugador o Jugador VS Maquina
+     */
     public void prepararElementosJugadores(){
         removeAll();
         setFondo(PantallaInicio.fondoI5);
@@ -123,6 +144,9 @@ public class PantallaInicio extends JPanel {
         repaint();
     }
 
+    /**
+     * los elementos para los datos de los jugadores
+     */
     public void areasDates() {
         removeAll();
         setFondo(PantallaInicio.fondoI4);
@@ -166,7 +190,10 @@ public class PantallaInicio extends JPanel {
         repaint();
     }
 
-
+    /**
+     * Para visualizar
+     * @param g the <code>Graphics</code> object to protect
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(fondo, 0, 0, this);

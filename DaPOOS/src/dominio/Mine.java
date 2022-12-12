@@ -10,8 +10,8 @@ import java.io.Serializable;
 public class Mine extends Especial implements Serializable {
     /**
      * Constructor de la clase Mine
-     * @param x
-     * @param y
+     * @param x la posicion x de la mine
+     * @param y la posicion y de la mine
      */
     public Mine( int x, int y) {
         super("ORANGE", x, y);

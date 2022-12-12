@@ -20,7 +20,7 @@ public class Tablero extends JPanel {
     /**
      * Constructor de la clase Tablero
      * @param layout
-     * @param juego
+     * @param juego el juego nuevo que se crea
      */
 
     public Tablero(CardLayout layout,DamaPoos juego) {
@@ -153,7 +153,7 @@ public class Tablero extends JPanel {
     /**
      * Sirve para que cuando el jugador llegue a la primera fila del otro jugador pueda elegir la ficha especial en la que se
      * quiere convertir
-     * @return
+     * @return el numero que para la ficha especial
      */
     public int opcionesFichas(){
         String[] botones = {"Ninja", "Reina", "Zombie"};
@@ -172,8 +172,8 @@ public class Tablero extends JPanel {
 
     /**
      * Para que guarde el juego
-     * @param juego
-     * @param file
+     * @param juego el juego que se va guardar
+     * @param file el documento en donde se guarda el juego
      * @throws IOException
      */
     public void guardar(DamaPoos juego,File file) throws IOException {

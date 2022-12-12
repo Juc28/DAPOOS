@@ -16,9 +16,9 @@ public class Ficha extends Elemento implements Serializable {
 
     /**
      * Constructo de la clase Ficha
-     * @param color
-     * @param x
-     * @param y
+     * @param color que va tener la ficha
+     * @param x la posicion x de la ficha
+     * @param y la posicion y de la ficha
      */
     public Ficha(String color,Integer x, Integer y) {
         super(color, x, y);
@@ -31,8 +31,8 @@ public class Ficha extends Elemento implements Serializable {
 
     /**
      * Tercer constructor de la clase ficha
-     * @param x
-     * @param y
+     * @param x la posicion x de la ficha
+     * @param y la posicion y de la ficha
      */
     public Ficha(int x, int y) {
         super.setX(x);
@@ -41,7 +41,7 @@ public class Ficha extends Elemento implements Serializable {
 
     /**
      * Coloca la imagen correspondiente a la ficha
-     * @param icon
+     * @param icon la imagen que va tener la ficha
      */
     public void setIcon(ImageIcon icon) {
         this.icon = icon;
@@ -49,7 +49,7 @@ public class Ficha extends Elemento implements Serializable {
 
     /**
      * Restorna la imagen que tiene la ficha
-     * @return
+     * @return la imagen que tiene la ficha
      */
     public ImageIcon getIcon(){
         return icon;

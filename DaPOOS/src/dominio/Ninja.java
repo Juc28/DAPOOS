@@ -12,9 +12,9 @@ public class Ninja extends Ficha implements Serializable {
     private boolean tieneVidas = true;
     /**
      * Constructor de la clase ninja
-     * @param color
-     * @param x
-     * @param y
+     * @param color  que va tener la ficha ninja
+     * @param x la posicion x de la ficha ninja
+     * @param y la posicion y de la ficha ninja
      */
     public Ninja(String color,int x, int y) {
         super(color, x, y);
@@ -32,7 +32,7 @@ public class Ninja extends Ficha implements Serializable {
 
     /**
      * Retorna si esta ficha perdio la vida
-     * @return
+     * @return si aun tiene vidas la ficha ninja
      */
     public boolean getTieneVidas(){
         return tieneVidas;
